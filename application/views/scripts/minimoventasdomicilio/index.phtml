@@ -1,0 +1,84 @@
+<style type="text/css">
+	.material-switch > input[type="checkbox"] {
+	    display: none;   
+	}
+
+	.material-switch > label {
+	    cursor: pointer;
+	    height: 0px;
+	    position: relative; 
+	    width: 40px;
+	    top : 8px;
+	}
+
+	.material-switch > label::before {
+	    background: rgb(0, 0, 0);
+	    box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
+	    border-radius: 8px;
+	    content: '';
+	    height: 16px;
+	    margin-top: -8px;
+	    position:absolute;
+	    opacity: 0.3;
+	    transition: all 0.4s ease-in-out;
+	    width: 40px;
+	    left: 0px;  
+	}
+	.material-switch > label::after {
+	    background: rgb(255, 255, 255);
+	    border-radius: 16px;
+	    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+	    content: '';
+	    height: 24px;
+	    left: -4px;
+	    margin-top: -8px;
+	    position: absolute;
+	    top: -4px;
+	    transition: all 0.3s ease-in-out;
+	    width: 24px;
+	}
+	.material-switch > input[type="checkbox"]:checked + label::before {
+	    background: inherit;
+	    opacity: 0.5;
+	}
+	.material-switch > input[type="checkbox"]:checked + label::after {
+	    background: inherit;
+	    left: 20px;
+	}
+	.table-striped > tbody > tr:nth-of-type(odd) {
+	    background-color: #D6EAF8;
+	}
+</style>
+<script type="text/javascript">
+	$('#rutaReal').remove();
+</script>
+<script src="<?= JAVASCRIPT_PATH ?>/views/minimoventadomicilio.js?v=<?php echo rand(1,1000); ?>" type="text/javascript"></script>
+<div class="card" style="min-height: 400px; background-color:#eaeaea; box-shadow: 2px 5px 2px #ddd;">
+	<div class="card-title" style="text-align: center; background-color:#01579A; color:white; box-shadow: 2px 5px 2px #ddd;">
+		<h1>Montos minimos de Venta a Domicilio en sucursal.</h1>
+	</div>
+	<div class="card-content">
+		<div class="card-body">
+			<div class="row">
+				<div class="col-xs-2">&nbsp;</div>
+				<div class="col-xs-8">
+					<table style="width:100%" id="montosMinimosTable" class="table-striped">
+						<thead>
+							<tr>
+								<th style="text-align: left;">Sucursal</th>
+								<th style="text-align: center;">Monto con Pago en Efectivo</th>
+								<th style="text-align: center;">Monto mínimo con Pago en Web Pay & Cuenta Referenciada y Tarjeta de Débito y/o Credito</th>
+								<th style="text-align: center;">Acciones</th>
+							</tr>
+						</thead>
+						<tbody></tbody>
+					</table>
+				</div>
+				<div class="col-xs-2">&nbsp;</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	cargarDatosTabla();
+</script>

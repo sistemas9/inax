@@ -1,0 +1,138 @@
+<body>
+	<style>
+	li.complete {
+		text-decoration: line-through;
+		color: red;
+	}
+</style>
+<script>
+    $(function() {
+   	var people = [];
+	$.getJSON('token.json', function(data) {
+		console.log(data[0].Token);
+       $.each(data, function(i, f) {
+          var tblRow = "<tr>" + "<td>" + this.Token + "</td>" +"</tr>"
+           $(tblRow).appendTo("#userdata tbody");
+     });
+
+   });
+
+});
+</script>
+<hr>
+<pre>	ATP/Administracion del sistema/comun/usuarios/usuarios
+</pre>
+<hr>
+<div class="wrapper">
+	<div class="profile">
+		<table id="userdata" border="2">
+			<thead>
+	            <tr><th>Token</th>
+        	</tr></thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div>
+</div>
+<hr>
+<form action="impresion-cotizacion" method="post" target="_blank">
+	<input type="text" id="QuotationId" name="QuotationId" value="ATP-001924"><br>
+	<input type="text" id="CountCotizacion" name="CountCotizacion" value="1"> <br>
+	<input type="text" id="comentarioCabeceraCOT" name="comentarioCabeceraCOT" value=""> <br>
+	<input type="text" id="ordenClteCOT" name="ordenClteCOT" value=""> <br>
+	<input type="text" id="refClteCOT" name="refClteCOT" value=""><br>
+	<button class="btn brown darken-4" type="submit" id="ImprimirCotizacion"><br>
+		Imprimir Cotización
+	</button>
+</form>
+<hr>
+
+<h1>Productivo</h1>
+
+<a href="https://ayt.operations.dynamics.com/?cmp=ATP&amp;mi=WHSWorkTable" class="button is-link">Dynamics 365 PROD</a>
+<a href="https://solutiontinax-solutiontokeninaxpr.azurewebsites.net/SolutionToken/api/SolutionToken" class="button is-info">Token</a>
+
+<pre>	http://localhost/inax/public/impresion-recibo?id=OV-2000000670&amp;diario=COTV000001174
+</pre>
+
+<h1></h1>
+
+<pre>	https://solutiontinax-solutiontokeninaxpr.azurewebsites.net/SolutionToken/api/SolutionToken
+</pre>
+
+<hr>
+
+<h1>Desarrollo</h1>
+
+<a href="https://tes-ayt.sandbox.operations.dynamics.com/" class="button is-primary">Dynamics 365 TEST</a>
+<a href="https://solutiontinax.azurewebsites.net/SolutionToken/api/SolutionToken" class="button is-success">Token</a>
+
+<a class="button is-danger">Danger</a>
+
+<pre>	https://solutiontinax.azurewebsites.net/SolutionToken/api/SolutionToken
+</pre>
+
+<a href="impresion-recibo?id=ATP-001924" target="_blank">
+	Impresión Recibo
+</a>
+
+<hr>
+
+<h1>FACTURA</h1>
+
+<a href="http://svr02:8989/Facturacion365/Facturacion365produccionMariscal.php?company=atp&amp;ov=OV-2000000283&amp;type=inax&amp;invoiceId=FV1000000049&amp;transDate=02/01/2019&amp;custInvoiceAccount=C000001643&amp;" class="button is-warning">FACTURA</a>
+
+<h1>Pendientes</h1>
+<div class="columns">
+	<div class="column">
+<div class="content">
+	<ol>
+		<li>Business unit</li>
+		<li>json clientes</li>
+		<li>json arts</li>
+		<li>tax group</li>
+		<li>precios distintos</li>
+		<li>formato de fecha</li>
+		<li>uso del CFDI</li>
+		<li>Trabajos en COT</li>
+		<li>Separar botones de COT / OV</li>
+		<li>Inventario 10000!</li>
+	</ol>
+</div>		
+	</div>
+	<div class="column">
+<div class="content">
+	<ol class="complete is-lower-alpha" type="1">
+		<li>subsegment</li>
+		<li>Cambiar texto en botón</li>
+		<li>Agregar OV al documento de COT</li>
+	</ol>
+</div>		
+	</div>
+</div>
+
+<script>
+	var x = 'ATP-002121:Cliente ATP-000020 - EL CLIENTE 2';
+	var z = x.split(':')
+	console.log(z[0]);
+</script>
+
+OV-2000000670
+: COTV000001174
+
+
+
+
+
+{
+	"invoiceId": "FV1000000049",
+	"transDate": "02/01/2019",
+	"custInvoiceAccount": "C000001643",
+	"company": "atp"
+}		
+
+
+https://tes-ayt.sandbox.operations.dynamics.com/Data/STF_WHSWorkLineEntity?$filter=OrderNum eq 'ATP-000052'
+
+http://inax.aytcloud.com/Data/STF_WHSWorkLineEntity?$filter=OrderNum eq 'OV-2000000670'
+</body>

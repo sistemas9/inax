@@ -1,0 +1,75 @@
+<div class="panel panel-default">
+    <div class="panel-heading">Estadisticas clientes</div>
+    <div class="panel-body">
+    </div>
+    <hr/>
+    <div id="usuariosContenedor"class="tab-pane fade in active">
+        <nav class="navbar">
+            <div class="container-fluid">
+            <h3>Administracion Sectores -> Familia</h3>
+                <div class="row">
+                    <div class="col-md-4">
+                        <table class="table" id="table-sectores">
+                            <thead>
+                                <tr>
+                                    <th>Sector</th>
+                                    <th class="text-center" width="20%">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <?php 
+                                function xdebug($what) {
+                                    echo '<pre>';
+                                    if ( is_array( $what ) )  {
+                                        print_r ( $what );
+                                    } else {
+                                        var_dump ( $what );
+                                    }
+                                    echo '</pre>';
+                                }
+
+                                foreach ($this->segmentsArray as $segment) {
+                                    echo '<tr  id="'.str_replace(' ', '',$segment->id).'" class="primary">';    
+                                    echo    '<td>'.$segment->description.'</td>';
+                                    echo    '<td align="center"><button type="button" class="btn btn-primary sectorToggle" data-dismiss="modal" data-id="'.$segment->id.'"><i class="fa fa-edit fa-fw"></i></button></td>';
+                                    echo '</tr>';
+                                }
+                            ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="col-md-8" style="min-height: 600px;min-width: 200px;" id="selectFamily"></div>
+                </div>
+            </div>
+        </nav>      
+    </div>
+</div>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js"></script>
+<script>
+    var lastTrColored = ''; 
+    $(".sectorToggle").click(function(){
+        $('#selectFamily').addClass("se-pre-con");
+	$( "#selectFamily" ).empty();
+        var currentId = $(this).data('id');
+        currentId = currentId.replace(/\s/g,'');
+        if(lastTrColored){
+            $("#"+lastTrColored).css('background-color', '')
+            lastTrColored = currentId;   
+        }else{
+            lastTrColored = currentId;
+        }
+        $("#selectFamily").load( "administracionsectores/getfamily",{segment: $(this).data('id')},function() {
+            $('#selectFamily').removeClass("se-pre-con");
+        });
+        $("#"+currentId).css('background-color', '#97BF7A');
+    });
+    $('.paginate_button').click(function(){
+         $("#"+lastTrColored).css('background-color', '')
+         console.log('perrote');
+         
+    });
+
+    
+    $("#table-sectores").dataTable();
+</script>

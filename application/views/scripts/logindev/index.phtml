@@ -1,0 +1,99 @@
+<html>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+          <?php
+          echo $this->headTitle();
+          echo $this->headLink();
+          ?>
+    <link href="https://fonts.googleapis.com/css?family=Black+Ops+One" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to right, #666 , #666);
+            background-size: cover;
+        }
+
+        .inner {
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            max-width: 440px;
+            width: calc(100% - 40px);
+            padding: 22px 44px 0 44px;
+            margin-bottom: 28px;
+            background-color: #fff;
+            -webkit-box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            -moz-box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            min-width: 320px;
+            min-height: 338px;
+            overflow: hidden;
+        }
+
+        .text-title {
+            color: #404040;
+            font-size: 1.5rem;
+            font-weight: 600;
+            padding: 0;
+            margin-top: 20px;
+            margin-bottom: 12px;
+            font-family: "Segoe UI","Helvetica Neue","Lucida Grande","Roboto","Ebrima","Nirmala UI","Gadugi","Segoe Xbox Symbol","Segoe UI Symbol","Meiryo UI","Khmer UI","Tunga","Lao UI","Raavi","Iskoola Pota","Latha","Leelawadee","Microsoft YaHei UI","Microsoft JhengHei UI","Malgun Gothic","Estrangelo Edessa","Microsoft Himalaya","Microsoft New Tai Lue","Microsoft PhagsPa","Microsoft Tai Le","Microsoft Yi Baiti","Mongolian Baiti","MV Boli","Myanmar Text","Cambria Math";
+        }
+
+        .errorLog {
+            color: #e81123;
+            font-size: 12px;
+            text-align: left;
+        }
+
+    </style>
+
+    <body>
+        <div class="container">
+            <div class="row" id="login-panel">
+                <div class="inner">
+                    <div class="row text-title" id="loginHeader">
+                        <div style="text-align: left; padding-left: 0px;">
+                            <!-- <img src="<?= IMAGES_PATH ?>/logo-inax-365-theme.png" style="width: 75px; margin: 0 0 15px 0; border:0px solid black; padding-left: 0;"> -->
+                            <h1 style="font-family: Black Ops One; font-size: 34px;color: #666; margin:0px; ">
+                                in<span style="font-size: 35px;">AX</span>
+                            </h1>
+                        </div>
+                        <div role="heading" aria-level="1" data-bind="text: title">
+                            Iniciar sesión
+                            <br>
+                            <form action="logindev" method="post">
+                                <div class="row">
+                                    <div class="input-field col l12 offset-l0">
+                                        <input id="icon_prefix" type="text" name="userLogin" class="validate" placeholder="Usuario">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col l12 offset-l0">
+                                        <input id="password"type="password" name="userPassword" class="validate" placeholder="Contraseña">
+                                        <a href="https://tickets.aytcloud.com/app/itdesk/WOListView.do" target="_blank" style="color: #0067b8; font-size: 12px; font-family: helvetica; font-weight: lighter;">
+                                            ¿No puede acceder a su cuenta?
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <?php 
+                                        if ($this->error == 1) echo '<p class="col l12 errorLog">Usuario y/o Contraseña Incorrectos</p>';
+                                        if ($this->error == 4) echo '<p class="col l12 errorLog">No autorizado para iniciar sesión</p>'; 
+                                    ?>
+                                    <div class="offset-l6 col l6">
+                                        <button class="btn" type="submit" name="action" style="font-size: 14px; background-color: #005da6; text-transform: none; font-weight: lighter;">
+                                            Iniciar Sesión 
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="row">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

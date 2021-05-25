@@ -1,0 +1,35 @@
+<?php
+
+	$dynamicVersion = date("s") . rand(1, 999);
+?>
+<link rel="stylesheet" href="../application/assets/css/views/365.css?v=<?= $dynamicVersion ?>">
+<div class="row header365">
+	<div class="col-md-12">
+	  	<h4>Ordenes de Devolución</h4>
+	</div>
+</div>
+<div class="row main365">
+	<br>
+	<div class="col-md-12">
+		<form name="devolucion" id="devolucion">
+			<div class="content365">
+				<h1>Inventarios</h1>
+				<input type="text" id="articulo" name="articulo" class="col-4">
+				<button type="" name="botonGet" id="botonGet" onclick="getInventory($('#articulo').text())" >Obtener inventario</button>
+				<table id="tblInventarios" class="table365" border="1">
+					<thead>
+					<tr>
+						<th>Sitio</th>
+						<th>Almacén</th>
+						<th>Existencia</th>
+						<th>Cantidad</th>
+					</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+		</form>
+	</div>
+</div>
+<script src="<?= JAVASCRIPT_PATH ?>/views/inventarios.js?v=<?= $dynamicVersion ?>" type="text/javascript"></script>

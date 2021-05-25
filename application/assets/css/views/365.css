@@ -1,0 +1,66 @@
+<style>
+	#artis, #artis2 {
+		width: 100%;
+	}
+	.page-header {
+		margin-top: 0px;
+	}
+	.header365 {
+		margin-top: -14px;
+		background-color: #f4f4f4;
+		border-bottom: 1px solid #CCC;
+	}
+	.main365 {
+		background-color: #eaeaea;
+	}
+	.content365 {
+		background-color: #eaeaea;
+		width: 95%;
+		margin: auto;
+		height:100vh;
+	}
+	.table365 {
+		background-color: White;
+		width: 100%;
+		margin: auto;
+	}
+	.table365 th {
+		font-weight: lighter;
+		padding: 5px;
+	}
+	.table365 td input {
+		width: 100%;
+	}
+	.table365 select {
+		width: 100%;	
+	}
+	.inputText365 {
+		border-radius: 0px !important; 
+		border: 1px solid black;
+	}
+	.inputText365N, .inputSelect365N {
+		border-radius: 0px !important; 
+		border: 0px solid black;
+	}
+	.content365 label {
+		font-style: normal;
+    	font-family: 'Segoe UI',tahoma,sans-serif;
+    	font-size: 12px;
+    	font-variant: normal;
+    	font-weight: 400;
+	}
+	.dynamicsButton {
+	    font-weight: lighter;
+	    margin-left: 10px;
+	    min-width: 105px;
+	    min-height: 33px;
+	    background-color: #deecf9;
+	    border: 1px solid #307BB5;
+	    padding: 0 10px;
+	    color: #333;
+	}
+	.dynamicsButton:hover {
+		background-color: #eeefff;
+		border: 1px solid #307BB3;
+	}
+</style>

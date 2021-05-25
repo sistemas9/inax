@@ -1,0 +1,480 @@
+<style>
+    #materialize-lean-overlay-4 {
+        display: none;
+    }
+
+    #dropdownDirecciones {
+        min-height: calc(100vh - 40vh);
+        background: white;
+    }
+
+    #dropdownDirecciones table tr th:first-child, #dropdownDirecciones table tr td:first-child,
+    #dropdownDirecciones>div:nth-child(2), #dropdownDirecciones>div:nth-child(3)
+    {
+        display: none;
+        opacity: .5;
+    }
+    .selected{
+        background-color: #FFFFFF;
+        border-style: solid;
+        border-color: #48cbf3;
+        border-width: 1.5px;
+    }
+    #dropdownDirecciones {
+        min-height: calc(100vh - 40vh);
+        background: white;
+    }
+    #procesos>li>.active{
+        color: #000;
+        background-color: #ffffff;
+    }
+    h5.load-title:after {
+        content: 'Cargando...';
+        background-color: #757575;
+        font-size: 10px;
+        padding: 2.5px 5px;
+        border-radius: 3px;
+        color: white;
+        display: inline;
+        vertical-align: middle;
+        margin-left: 10px;
+        padding-left: 20px;
+        background-image:
+            url(http://khayilsbakeshop.com/wp-content/plugins/wp-order-extension/images/gif-load.gif);
+        background-size: 25px;
+        background-position: -2px center;
+        background-repeat: no-repeat;
+    }
+
+    .h5Form {
+        background-color: #002050;
+        color: White;
+        font-size: 14px;
+        height: 24px;
+    }
+
+    .h5Form i {
+        background-color: #0078D7;
+        color: White;
+        line-height: 18px;
+        padding: 5px;
+    }
+
+    .disable_a_href {
+        pointer-events: none;
+    }
+
+    @media only screen and (max-height: 767px) {
+        #rowResumenPartidas {
+            height: 460px;
+            overflow-y: scroll;
+        }
+        body.theme form#FormArticulos>.row+.row {
+            height: 460px;
+            overflow: scroll;
+        }
+    }
+
+    @media only screen and (max-height:900px) and (min-height: 768px) {
+        #rowResumenPartidas {
+            height: 620px;
+            overflow-y: scroll;
+        }
+        body.theme form#FormArticulos>.row+.row {
+            height: 620px;
+            overflow: scroll;
+        }
+        input.formResizeInput {
+            height: 80%;
+        }
+    }
+
+    @media only screen and (min-height: 901px) {
+        #rowResumenPartidas {
+            height: 800px;
+            overflow-y: scroll;
+        }
+        body.theme form#FormArticulos>.row+.row {
+            height: 800px;
+            overflow: scroll;
+        }
+    }
+
+    span[role=combobox] {
+        border-bottom: 1px solid #9e9e9e !important;
+        border-top: 0 !important;
+        border-left: 0 !important;
+        border-right: 0 !important;
+    }
+
+    .bordeTable {
+        border: 1px solid grey;
+        height: 15px;
+    }
+
+    .datoEtiqueta {
+        border-bottom: none !important;
+        height: 2rem !important;
+        font-size: 12px !important;
+        margin: 0 !important;
+        width: 100% !important;
+    }
+
+    .list-client {
+        font-size: 12px;
+    }
+
+    .divInfo {
+        background-color: red;
+        overflow: hidden;
+    }
+
+    .blk {
+        animation: blinker 1s linear infinite;
+    }
+
+    .sale-box,.sale-box.two,.sale-box.three{
+        position: absolute;
+        top: 0;
+        overflow: hidden;
+        height: 130px;
+        width: 143px;
+        text-align: center;
+        z-index: 0;
+        right:0;
+        border-top-right-radius: 0.7em;
+        -o-border-top-right-radius: 0.7em;
+        -moz-border-top-right-radius: 0.7em;
+        -webkit-border-top-right-radius: 0.7em;
+    }
+
+    .sale-box span.on_sale{
+        font-size: 14px;
+        color: #444;
+        background: #ffd400;
+        text-transform: uppercase;
+        padding: 58px 35px 17px 40px;
+        width: 281px;
+        text-align: center;
+        display: block;
+        position: absolute;
+        left: -47px;
+        top: -41px;
+        -moz-transition: all 0.5s ease;
+        -webkit-transition: all 0.5s ease;
+        transition: all 0.5s ease;
+        -webkit-transform: rotate(-44deg);
+        -ms-transform: rotate(-44deg);
+        transform: rotate(40deg);
+        box-shadow: 3px -4px 13px 3px rgba(0,0,0,0.75);
+    }
+
+    @keyframes blinker { 50% {
+                             opacity: 0;
+                         }
+    }
+    #modal1.modal{
+        width: 95% !important;
+    }
+</style>
+     <script src="<?= JAVASCRIPT_PATH ?>/views/listadepreciospre.js?v=<?php echo date("h"); ?>4" type="text/javascript"></script>
+     <div class="col-md-12" style="text-align: center;">
+                <label style="color: #337AB7;font-size: 20px;font-weight: bolder;">LISTA DE PRECIOS POR CLIENTE</label>
+            </div>
+        </div>
+        <br/>
+        <div class="row">
+            <!-- PARTE DE INFORMACION DE CLIENTES CON UATOCOMPLETAR-->
+            <h5 class="light-blue darken-4 h5Form">
+                <i class="material-icons left h5Formi">perm_identity</i>
+                Información del Cliente
+            </h5>
+            <br>
+            <div class="input-field col 8 m2 s2">
+                <label for="claveclte">Código ó Nombre de Cliente</label> 
+                <input  class="formResizeInput" type="text" name="claveclte" id="claveclte" required="" aria-required="true">
+            </div>
+               <div class="input-field col l4 m3 s12">
+                <label for="cliente">Nombre de Cliente</label> 
+                <input class="formResizeInput dirsClte" id="cliente" type="text" name="cliente" class="dropdown-button DirCliente" data-activates="dropdownDirecciones" required="" aria-required="true" readonly>
+            </div>          
+        </div>
+        <div class="row">
+            <div class="input-field col l2 m3 s12">
+                <label for="Listaprecio">Lista de precios</label> 
+                <input class="formResizeInput" id="Listaprecio" type="text" name="Listaprecio"readonly>
+            </div>
+            <div class="input-field col l2 m3 s12">
+                <label for="Listadescuento">Lista de descuentos</label> 
+                <input class="formResizeInput" id="Listadescuento" type="text" name="Listadescuento" readonly/>
+            </div>
+          <div class="row">
+            <div class="input-field col l3 m12 s15">
+                <label for="direccion">Dirección</label>
+                <input class="formResizeInput" id="direccion" type="text" name="direccion" readonly> 
+                <input type="hidden" id="RecIdDireccion" name="RecIdDireccion" > 
+                <input type="hidden" id="CargoDesc" name="CargoDesc" > 
+                <input type="hidden" id="ctaBanco" name="ctaBanco" > 
+                <input type="hidden" name="documentType" value="<?= $tpo ?>" >
+            </div> 
+         </div>
+        <div class="input-field col l4 m8 sl8">
+                <label>Vendedor</label> <select id="vendedor" required name="vendedor" style="display: block;width: 100%">
+                    <option value="">Usuario no asignado....</option>
+                </select>
+         </div>  
+        <div class="col s2 offset-s1" style="text-align:right ; background-color: White; text-align: left;">
+            <button style="" class="btn light-blue darken-4 white-text tooltipped" data-position="left" data-delay="50" type="button" name="submit" id="SubmitHeader" onclick="$('#familia').show();showModa()">Continuar</button>
+        </div>
+        </div>
+         <div id="busquedaGrupoFamiliaModal" class="modal modal-fixed-footer"
+                 style="width: 1098px !important; height: 1500px !important;">
+                <div class="modal-content" style="width: 1098px !important; height: 1500px !important;">
+                    <div class="row">
+                        <h5 class="light-blue darken-4 h5Form">Busqueda</h5>
+                       <div class="input-field col l4 m2 s2">
+                           <label for="claveGrupo">Buscar Categorías</label> 
+                           <input  class="formResizeInput" type="text" name="claveGrupo" id="claveGrupo" required="" aria-required="true">
+                     </div>
+                       <div class="input-field col l8 m8 s8">
+                           <label for="ResultadoFamilia">Resultado:</label> 
+                           <!-- <input  class="formResizeInput" type="text" name="ResultadoFamilia" id="ResultadoFamilia" required="" aria-required="true"> -->
+                           <select name="familia" id="familia" style="width: 600px !important; height: 100px !important; display: inline-block;" class="form-control selectpicker" display="table-cell" multiple data-action-box="true" >
+                              <?php foreach ($this->listaResult as $k => $v) {
+                            echo '<option value="'.$v['Familia'].'">'.$v['Familia']."</option>";
+                               } ?>                            
+                           </select>
+                     </div> 
+                   <!--    <div class="input-field col l4 m2 s2">
+                           <label for="claveFam">Busqueda por Familia</label> 
+                           <input  class="formResizeInput" type="text" name="claveFam" id="claveFam" required="" aria-required="true">
+                     </div> -->
+               <!--       <div class="input-field col l8 m8 s8">
+                           <label for="artículoid">Buscar por código de artículo</label> 
+                           <input  class="formResizeInput" type="text" name="artículoid" id="artículoid" required="" aria-required="true">
+                     </div> -->
+                      <!--        <select name="familia" id="familia" class="form-control selectpicker" multiple data-action-box="true" >
+                              <?php foreach ($this->listaResult as $k => $v) {
+                            echo '<option value="'.$v['Familia'].'">'.$v['Familia']."</option>";
+                               } ?>                            
+                           </select> -->
+                 <!--     <div class="input-field col l8 m8 s8">
+                            <a  class="btn col l2 m2 s4"   style="line-height: 44px; height: 44px;" id="BuscarFam" 
+                            onclick="buscarFamilia();">
+                                <i class="mdi-action-search"></i>
+                            </a>
+                        </div> -->
+                        <div class="preloader-wrapper big active" id="preloader" style="display: none;">
+                           <div class="spinner-layer spinner-blue-only">
+                           <div class="circle-clipper left">
+                              <div class="circle"></div>
+                            </div><div class="gap-patch">
+                              <div class="circle"></div>
+                            </div><div class="circle-clipper right">
+                              <div class="circle"></div>
+                            </div>
+                          </div>
+                        </div>
+                        <!--resultado busqueda de artículos de las familias-->
+                        <div class="divider"></div>
+                        <table id="ResultBusqueda" class="table" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <td>Código Artículo</td>
+                                    <td>Descripcion de Artículo</td>
+                                    <td>Unidad de venta</td>
+                                    <td>Precio</td>
+                                    <td>Moneda</td>
+                                    <td>Seleccionar</td>
+                                </tr>
+                            </thead>
+                            <tbody>                                
+                            </tbody>
+                        </table>
+                    </div> 
+                    <div class="row">
+                      <table id="addItem" class="table" style="width:100%;">
+                            <thead>
+                              <h5>Lista de artículos</h5>
+                                <tr>
+                                    <td>Código Artículo</td>
+                                    <td>Descripcion de Artículo</td>
+                                    <td>Unidad de venta</td>
+                                    <td>Precio</td>
+                                    <td>Moneda</td>
+                                    <!-- <td>Seleccionar</td> -->
+                                </tr>
+                            </thead>
+                            <tbody>                                
+                            </tbody>
+                        </table>                     
+                    </div>                                  
+                </div>     
+                <div class="modal-footer">
+                    <div class="row col l8 offset-l4">
+                        <a class="btn modal-action offset-l8 col l8 green lighten-2 white-text" id="agregarItemsReport">Generar Lista de precios</a>
+                        <form id="pdf" method="POST" action="ImprimeListadepreciospre/showpdf" target="_blank">
+                            <input type="hidden" name="idactual" id="idactual"/>
+                            <input type="hidden" name="idvendedor" id="idvendedor"/>
+                            <input type="hidden" name="idcliente" id="idcliente"/>
+                            <input type="hidden" name="namecliente" id="namecliente"/>
+                            <input type="hidden" name="addrescliente" id="addrescliente"/>
+                        </form>
+                    </div>         
+               </div>
+            </div>
+            <script>
+                cargarUsuarios(<?= json_encode($_SESSION['usuarios']) ?>);
+                 $("#claveGrupo").autocomplete({           
+                 autoFocus: true,
+                 minLength: 3,
+                 //funcion de busqueda de grupos
+                 source: function (request, response) {
+                     var buscar = request.term.split('*');
+                     itemGrupo = [];
+                     $(buscar).each(function (index, valor) {
+                         if (index == 0) {
+                            itemGrupo = mapeoGrupo(valor, listaGrupos, request);
+
+                         } else {
+                             itemGrupo = mapeoGrupo(valor, itemGrupo, request);
+                         }
+                     });
+                     response(itemGrupo);
+                 },
+                 response: function (event, ui) {
+                  if (ui.content.length === 0) {
+                         ui.content.push({label: "No hay Resultados", value: " "});
+                     }
+                  },
+                 select: function (event, ui) {
+                     var claveGrupo = ui.item.value;                
+                     $.ajax({
+                         url: "listadepreciospre/clavegrupo", 
+                         type: "post", 
+                         dataType: "json", 
+                         data: {'claveGrupo': claveGrupo,'autoSel':1},
+                         success: function (data) {                         
+                             buscarFamilia();
+                         }                       
+                     }) 
+                 }
+              })
+
+           cargarGrupos(<?= $this->listaGrupo ?>); 
+          </script>
+           <script>
+           $('#rutaReal').remove(); 
+           $("#claveclte").autocomplete({           
+                autoFocus: true,
+                minLength: 3,
+                source: function (request, response) {
+                    var buscar = request.term.split('*');
+                    itemClte = [];
+                    $(buscar).each(function (index, valor) {
+                        if (index == 0) {
+                            itemClte = mapeoClte(valor, clients, request);
+                        } else {
+                            itemClte = mapeoClte(valor, itemClte, request);
+                        }
+                    });
+                    response(itemClte);
+                },
+                response: function (event, ui) {
+                    if (ui.content.length === 0) {
+                        ui.content.push({label: "No hay Resultados", value: " "});
+                    }
+                 },
+                select: function (event, ui) {
+                    var claveclte = ui.item.value;                
+                    $.ajax({
+                        url: "inicio/cliente", 
+                        type: "post", 
+                        dataType: "json", 
+                        data: {'cliente': claveclte,'autoSel':1},
+                        success: function (data) {
+                           $("#cliente").val(ui.item.nombre);
+                            $("#Listaprecio").val(ui.item.ConjuntoPrecios);
+                            $("#direccion").val(data[0].Direccion);
+                            $('#Listadescuento').val(ui.item.DescuentoLinea);                    
+                        }                       
+                    }) 
+                }
+             })
+            cargarClientes(<?= $this->cliente ?>);      
+            $("#claveFam").autocomplete({           
+                autoFocus: true,
+                minLength: 3,
+                //funcion de busqueda por familias
+                source: function (request, response) {
+                    var buscar = request.term.split('*');
+                    itemFamilia = [];
+                    $(buscar).each(function (index, valor) {
+                        if (index == 0) {
+                            itemFamilia = mapeoFamilia(valor, listaFamilias, request);
+                        } else {
+                            itemFamilia = mapeoFamilia(valor, itemFamilia, request);
+                        }
+                    });
+                    response(itemFamilia);
+                },
+                response: function (event, ui) {
+                    if (ui.content.length === 0) {
+                        ui.content.push({label: "No hay Resultados", value: " "});
+                    }
+                 },
+                select: function (event, ui) {
+                    var claveFam = ui.item.value;                
+                    var cliente = $("#claveclte").val();
+                    var familia = ui.item.value; 
+               // console.log(familia);
+              // console.log(cliente);
+                 // $.ajax({
+                 //         url:"Listadepreciospre/listaarticulos",
+                 //         type:"post", 
+                 //         data:{cliente: cliente, familia: familia},             
+                 //         dataType: 'json',
+                 //         data: {'familia': familia,'autoSel':1},
+                 //         beforeSend: function (xhr) {
+                 //         },
+                 //         success: function (data) { 
+                 //         }
+                 //       nb     });
+                //           if(data.length > 0){                        
+                //              $('#ResultBusqueda').DataTable().destroy();
+                //              $("#ResultBusqueda > tbody").html("");
+                //             if (!data["noresult"]){
+                //                 for (var i=0;i<data.length;i++){
+                //                     $("#ResultBusqueda > tbody").append('<tr data-cliente="'+data[i].organizacionNum+'"><td>'
+                //                      + data[i].idArticulo + '</td><td>' 
+                //                      + data[i].Nombre +'</td><td>' 
+                //                      + data[i].unidad +'</td><td>' 
+                //                      + "$" + data[i].precio +'</td><td>' 
+                //                      + data[i].moneda +'</td>'
+                //                      + '<td><input type="checkbox" data-idArticulo="'+data[i].idArticulo+'" data-Nombre="'+data[i].Nombre+'" data-unidad="'+data[i].unidad+'" data-precio="'+data[i].precio+'" data-idArticulo="'+data[i].moneda+'" class="col l1 s1 m1 checkFam" id="itemCheckFam'+i+'"/><label for="itemCheckFam'+i+'"></label></td></tr>');
+                //                       $('.checkFam').prop('checked', 'true'); 
+                //                 }                 
+                //             }
+                //             else{
+                //                 $("#ResultBusqueda > tbody").append('<tr><td colspan="5" class="center-align">'+ data["noresult"] +'</td></tr>');
+                //             }                      
+                //           $('#ResultBusqueda').DataTable({
+                //              "destroy": true,
+                //               "bPaginate": true,
+                //               "bLengthChange": false,
+                //               "bFilter": true,
+                //               "bInfo": false,
+                //              "bAutoWidth": false
+                //           }).draw();
+                //       }
+                //         }, error: function(err){
+                //             console.log("error, ", JSON.stringify(err));
+                //         }
+                //               // console.log(data);                                                
+                //  });
+                }
+             })
+            cargarFamilias(<?= $this->listaFam ?>);    
+       </script>
+       <script>    
+       </script>

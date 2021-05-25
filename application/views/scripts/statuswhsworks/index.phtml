@@ -1,0 +1,132 @@
+<style type="text/css">
+	.input-group-addon {
+	    padding : 6px 12px;
+	    font-size : 25px;
+	    font-weight : normal;
+	    line-height : 1;
+	    color : #555;
+	    text-align : center;
+	    background-color : #eee;
+	    border : 1px solid #ccc;
+	    border-radius : 4px;
+	}
+	.selected {
+		background-color : #6495ED !important;
+		color : white !important;
+	}
+	thead.liberadas, tbody.liberadas { display: block; }
+
+	tbody.liberadas {
+	    height: 300px;       /* Just for the demo          */
+	    overflow-y: auto;    /* Trigger vertical scroll    */
+	    overflow-x: hidden;  /* Hide the horizontal scroll */
+	    cursor: pointer;
+	}
+
+	table.liberadas {
+	    width: 100%; /* Optional */
+	}
+
+	tbody.liberadas td, thead.liberadas th {
+	    width: 20%;  /* Optional */
+	}
+</style>
+<!-- Modal loading -->
+<div id="modalLoading" class="modal light-blue darken-3" style="width: 25%">
+    <div class="modal-content" style="border: solid 2px #01579b">
+        <div style="text-align: center">
+            <div class="preloader-wrapper big active">
+                <div class="spinner-layer spinner-red-only">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="gap-patch">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h5 style="color: white">Sus datos se estan cargando...</h5>
+    </div>
+</div>
+<!--   end modal loading    --> 
+<div class="row">
+	<div class="card" style="min-height: 700px;background-color:#eaeaea;box-shadow: 2px 5px 2px #ddd;">
+		<div class="row">
+			<div class="col l4 m4 s4">&nbsp;</div>
+			<div class="col l4 m4 s4" style="text-align: center;">
+				<label for="ordenVta" style="font-size: 35px;">Ingrese la Orden de Venta: </label><br>
+				<span class="input-group-addon" id="basic-addon1">OV-</span>
+				<input type="number" name="ordenVta" id="ordenVta" maxlength="10" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'); if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"style="width: 35%; font-size: 29px;"/>
+			</div>
+			<div class="col l4 m4 s4">
+				<!-- <a class="btn-floating pulse" style="background:red"><i class="material-icons dp48" style="color:black">highlight_off</i></a><label style="padding-left:5px">No procesado</label>-->
+				<a class="btn-floating pulse" style="background:green" onclick="javascript:location.reload()"><i class="material-icons dp48" style="color:white">refresh</i></a><label style="padding-left:5px">Actualizar pagina</label>
+			</div>
+		</div>
+		<hr>
+		<div class="row">
+			<div class="col l1 m1 s1">&nbsp;</div>
+			<div class="col l10 m10 s10">
+				<table class="table striped liberadas" id="tablaOVsLiberadas">
+					<thead class="liberadas">
+						<tr>
+							<th>Orden de Venta</th>
+							<th>Cod. Cliente</th>
+							<th>Cliente</th>
+							<th>Sitio</th>
+							<th>Estatus OV</th>
+							<th>Estatus Liberacion</th>
+						</tr>
+					</thead>
+					<tbody class="liberadas"></tbody>
+				</table>
+			</div>
+			<div class="col l1 m1 s1">&nbsp;</div>
+		</div>
+		<hr>
+		<div class="row" style="max-height: 250px; overflow-x: hidden; overflow-y: scroll;">
+			<div class="col l1 s1 m1">&nbsp;</div>
+			<div class="col l9 s9 m9">
+				<table class="table striped" id="tablaDetalleLineas" >
+					<thead>
+						<tr>
+							<th>Num.</th>
+							<th>Tipo</th>
+							<th>Articulo</th>
+							<th>Descripcion</th>
+							<th>Cantidad</th>
+							<th>Unidad</th>
+							<th>Sitio</th>
+							<th>Almacen</th>
+							<th>Estado</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+			</div>
+			<div class="col l2 s2 m2">
+				<a class="btn-floating pulse" style="background:green" onclick="refreshWorks();"><i class="material-icons dp48" style="color:white">refresh</i></a><label style="padding-left:5px">Actualizar trabajos</label> 
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src="../application/assets/js/views/statuswhsworks.js"></script>
+<script type="text/javascript">
+	$('#rutaReal').remove();
+	$(document).ready(function(){
+		cargarTabla();
+		$(document).on('click','#tablaOVsLiberadas tbody tr',function(){
+			ov = '';
+			if (!$(this).hasClass('selected')){
+				$('#tablaOVsLiberadas tbody tr').removeClass('selected');
+				$(this).toggleClass('selected');
+			}
+			ov = $(this).find('td.SalesOrderNumber').html();
+			showWorks(ov);
+		});
+	});
+</script>

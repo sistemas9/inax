@@ -1,0 +1,22 @@
+{
+  "@odata.context":"https://ayt.operations.dynamics.com/data/$metadata#Customers(Name,CustomerAccount)",
+  "value":[
+    {
+      "@odata.etag":"W/\"JzcyNDYyNzc5NCw1NjM3MTgxMzI2OzAsMDsxLDU2MzcxNzgzMjY7MSw1NjM3MTc5MDc2OzQxOTc5MzcwMSw1NjM3MTk1NTc2OzEsNTYzNzIwNjA4NjsxLDU2MzcxNzkwNzY7MCwwOzEsNTYzNzIwNjA4NjswLDAn\"",
+      "Name":"SUPERIOR INDUSTRIES DE MEXICO S DE RL DE CV",
+      "CustomerAccount":"C000000001"
+    },{
+      "@odata.etag":"W/\"JzE0NDc1ODM0NDYsNTYzNzE4MTMyNzswLDA7MSw1NjM3MTc4MzI3OzEsNTYzNzE3OTA3NzsyMTEyMTEyMzQ5LDU2MzcxOTU1Nzc7MSw1NjM3MjA2MDg4OzEsNTYzNzE3OTA3NzswLDA7MSw1NjM3MjA2MDg4OzAsMCc=\"",
+      "Name":"TIGHITCO LATINOAMERICA SA DE CV",
+      "CustomerAccount":"C000000002"
+    },{
+      "@odata.etag":"W/\"Jzg2NjkyNDcwNiw1NjM3MTkwMTE2OzAsMDsxLDU2MzcxODYzNjY7MSw1NjM3MTg3MTE2OzIwMjk5ODk2MzYsNTYzNzIwNTEzMTsxLDU2MzcyMjY4MTY7MCwwOzAsMDswLDA7MCwwJw==\"",
+      "Name":"GEOFREDDY BARRANTES CHAVARRIA",
+      "CustomerAccount":"C000004563"
+    },{
+      "@odata.etag":"W/\"JzIwMTcxMDQ3MzksNTYzNzE5MDExNzswLDA7MCwwOzAsMDs4MTc4NDI1NzUsNTYzNzIwNTEzMjsxLDU2MzcyMjc5Nzg7MCwwOzEsNTYzNzIyNzk3ODsxLDU2MzcyMjc5Nzg7MCwwJw==\"",
+      "Name":"FRANCISCO JAVIER GUTIERREZ ESPINOZA",
+      "CustomerAccount":"C000007044"
+    }
+  ]
+}

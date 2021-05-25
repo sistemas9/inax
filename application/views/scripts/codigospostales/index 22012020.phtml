@@ -1,0 +1,139 @@
+<style>
+    #alta {
+		  transition: height .5s;
+		  height: 100px;
+		  overflow: hidden;
+    }
+    .novisi{
+    	height: 0px !important;
+    }
+</style>
+<!-- Modal loading -->
+<div id="modalLoading" class="modal light-blue darken-3" style="width: 25%">
+    <div class="modal-content" style="border: solid 2px #01579b">
+        <div style="text-align: center">
+            <div class="preloader-wrapper big active">
+                <div class="spinner-layer spinner-red-only">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="gap-patch">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h5 style="color: white">Sus datos se estan cargando...</h5>
+    </div>
+</div>
+<!--   end modal loading    --> 
+<div class="row">
+	<div class="card" style="min-height: 700px;background-color:#eaeaea;box-shadow: 2px 5px 2px #ddd;">
+		<div class="row">
+			<div class="col l12 m12 s12" style="text-align: center;">
+				<h4>ALTA DE CODIGOS POSTALES</h4>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col l12 s12 m12">
+				<a class="btn-floating pulse" style="background:green" onclick="javascript:$('#alta').toggleClass('novisi')"><i class="material-icons dp48" style="color:white">add_circle</i></a><label style="padding-left:5px">&nbsp;&nbsp;Insertar nuevo Codigo</label> 
+				<br>
+				<br>
+				<br>
+				<hr>
+			</div>
+		</div>
+		<div class="row novisi" id="alta">
+			<div class="col l2 m2 s2">
+				<label for="codigoPostal">COD. POSTAL</label>
+				<input type="text" name="codigoPostal" id="codigoPostal" class="dataZipCode">
+			</div>
+			<div class="col l2 m2 s2">
+				<label for="colonia">COLONIA</label>
+				<input type="text" name="colonia" id="colonia" class="dataZipCode">
+			</div>
+			<div class="col l2 m2 s2">
+				<label for="tipoColonia">TIPO COLONIA</label>
+				<select name="tipoColonia" id="tipoColonia" class="browser-default" style="background-color: #eaeaea;border: solid 1px #ddd">
+					<option value="Condominio">Condominio</option>
+					<option value="Ranchería">Ranchería</option>
+					<option value="Equipamiento">Equipamiento</option>
+					<option value="Ejido">Ejido</option>
+					<option value="Poblado comunal">Poblado comunal</option>
+					<option value="Aeropuerto">Aeropuerto</option>
+					<option value="Conjunto habitacional">Conjunto habitacional</option>
+					<option value="Colonia">Colonia</option>
+					<option value="Zona industrial">Zona industrial</option>
+					<option value="Pueblo">Pueblo</option>
+					<option value="Estación">Estación</option>
+					<option value="Fraccionamiento">Fraccionamiento</option>
+					<option value="Rancho">Rancho</option>
+					<option value="Residencial">Residencial</option>
+					<option value="Gran usuario">Gran usuario</option>
+					<option value="Unidad habitacional">Unidad habitacional</option>
+					<option value="Club de golf">Club de golf</option>
+					<option value="Parque industrial">Parque industrial</option>
+					<option value="Zona federal">Zona federal</option>
+					<option value="Zona comercial">Zona comercial</option>
+					<option value="Otro">Otro</option>
+				</select>
+			</div>
+			<div class="col l2 m2 s2">
+				<label for="municipio">MUNICIPIO</label>
+				<input type="text" name="municipio" id="municipio" class="dataZipCode">
+			</div>
+			<div class="col l2 m2 s2">
+				<label for="ciudad">CIUDAD</label>
+				<input type="text" name="ciudad" id="ciudad" class="dataZipCode">
+			</div>
+			<div class="col l2 m2 s2">
+				<button class="waves-effect waves-light btn" id="saveCodigos">Guardar</button>
+			</div>
+		</div>
+		<hr>
+		<div class="row">
+			<div class="col l12 m12 s12">
+				<table class="table striped" id="tablaCodigos">
+					<thead> 
+					</thead>
+					<tbody></tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src="../application/assets/js/views/codigospostales.js"></script>
+<script type="text/javascript">
+	$('#rutaReal').remove();
+	$(document).ready(function(){
+		cargarDatosTabla();
+	});
+	$('#saveCodigos').on('click',function(){
+		var codigoPostal = $('#codigoPostal').val()
+		var colonia = $('#colonia').val();
+		var tipoCol = $('#tipoColonia').val();
+		var municipio = $('#municipio').val();
+		var ciudad = $('#ciudad').val();
+
+		$.ajax({
+		    type     : 'POST',
+		    url      : 'codigospostales/savezipcodedata',
+		    data     : {codigoPostal,colonia,tipoCol,municipio,ciudad},
+		    dataType : 'json',
+		    beforeSend: function (xhr) {
+		       	$('#modalLoading').openModal();
+		    },
+		    success: function (data) {
+		    	$('.dataZipCode').val('');
+		    	$('#tablaCodigos').DataTable().ajax.reload( function(data) { $('#modalLoading').closeModal(); });
+		    },
+		    error : function(xhr,status){
+		    	console.log('error');
+		    	$('#modalLoading').closeModal();
+		    }
+		});
+	});
+</script>

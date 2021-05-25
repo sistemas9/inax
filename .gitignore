@@ -23,3 +23,8 @@
 /app/Config/core.php
 /app/Config/database.php
 /vendors/*
+
+/application/models/Login.php
+/application/models/UserConstants.php
+/public/index.php
+/library/includes/tokenClass/tokenClass.php

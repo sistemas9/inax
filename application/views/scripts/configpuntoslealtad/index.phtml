@@ -1,0 +1,179 @@
+<script src="<?= JAVASCRIPT_PATH ?>/views/configpuntoslealtad.js?v=<?php echo rand(1,1000); ?>" type="text/javascript"></script>
+<style type="text/css">
+	.aplicaPuntosCanje {
+		background-color: lightgreen !important;
+		font-weight: bolder;
+	}
+
+	.soloCanje {
+		background-color: deepskyblue !important;
+		font-weight: bolder;
+	}
+
+	.soloAplica {
+		background-color: lemonchiffon !important;
+		font-weight: bolder;
+	}
+
+	.aplicaPuntosCanje  i, .soloCanje  i, .soloAplica  i {
+		font-size: 20px;
+		margin-left: 23px;
+	}
+
+	.load-ajax:before {
+	    content: attr(data-msj);
+	    position: fixed;
+	    z-index: 1000;
+	    color: #ffffff;
+	    background-color: #000000;
+	    padding: 16px 32px 16px 78px;
+	    border-radius: 3px;
+	    bottom: 10px;
+	    left: 10px;
+	    font-weight: 500;
+	    background-image: url(http://www.justluxe.com/best-of-luxury/images/bol-loading.gif);
+	    background-size: 220px;
+	    background-repeat: no-repeat;
+	    background-position: -70px center;
+	    font-size: 16px;
+	    box-shadow: -5px 5px 20px 0px;
+	    transition: .3s;
+	    opacity: 0.85;}
+
+	.load-ajax:after {
+	  background-image: url(http://uploads.webflow.com/559af9ae30c483ec74512c38/54f4ca1edced7ed62ba934b4_infinite-gif-preloader.gif), white;
+	  background-position: center center;
+	  background-size: 216px;
+	  border-radius: 50%;
+	  bottom: 18px;
+	  content: '';
+	  height: 40px;
+	  left: 30px;
+	  position: absolute;
+	  width: 40px;
+	  z-index: 1000;
+	}
+</style>
+<div class="card" style="min-height: 700px;background-color:#eaeaea;box-shadow: 2px 5px 2px #ddd;">
+	<div class="card-content">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="col-md-4">
+					<label class="form-label">SELECCIONE UN ARTICULO</label>
+					<select class="form-control" id="articulos">					
+					</select>
+				</div>
+				<div class="col-md-2">
+					<label class="form-label">AGREGAR A PLAN LEALTAD</label>
+					<button type="btn" class="form-control" id="aplicarPuntosBtn" style="width:50%"><i class="fa fa-check"></i> Agregar</button>
+				</div>
+				<div class="col-md-2">
+					<label class="form-label">ASIGNAR PUNTOS DE CANJE</label>
+					<button type="btn" class="form-control" id="asignarPuntosBtn" style="width:50%"><i class="fa fa-check"></i> Asignar</button>
+				</div>
+			</div>
+		</div>
+		<hr style="border-top: 2px solid #CCC;">
+		<div class="row">
+			<div class="col-md-12">
+				<table class="table table-striped" id="tablaAplicaPuntos">
+					<thead>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	cargarArticulos(<?= $this->articulos ?>);
+	var articulosDataTable = <?= $this->datosDataTable ?>;
+	cargarDataTable(articulosDataTable);
+	/**
+	*** Funcion para agregar al plan de lealtad del articulo en la base de datos
+	**/
+	$(document).on('click','#aplicarPuntosBtn',function(){
+		if ($('#articulos').val() != ''){
+			swal({
+		        title 				: '<i>CONFIRMACIÓN</i>',
+		        type 				: 'info',
+		        html  				: '<p>Esta seguro de agregar el articulo: <br><h2><b>'+$('#articulos').val()+'<b></h2></p><br> <p>al plan de lealtad</p>',
+		        allowOutsideClick 	: false,
+		        showCancelButton    : true,
+		    }).then(function(result) {
+		    	if(result){
+		    		data = {codigoArticulo: $('#articulos').val()};
+		    		$.ajax({
+						beforeSend  : function(){
+				                $('body').attr('data-msj', 'Procesando Actualización ...');
+				                $('body').addClass('load-ajax');
+				            },
+				            url         : 'Configpuntoslealtad/updateAplica',
+				            type        : 'POST',
+				            dataType    : 'JSON',
+				            data        : data,
+				            success: function (data){
+				                console.log(data);
+				                $('body').removeClass('load-ajax');
+				                $('#tablaAplicaPuntos').DataTable().ajax.reload();
+				                swal('Aviso','El articulo: <b>'+codigoArti+'</b> se ha activado para puntos de lealtad <u style="color:green">Correctamente</u>','info');
+				            }
+					});
+		    	}
+		    });
+		}else{
+			swal('Aviso','Debe seleccionar un articulo antes de continuar','warning');
+		}
+	});
+
+	/**
+	*** Funcion para asignar puntos de canje del articulo en la base de datos
+	**/
+	$(document).on('click','#asignarPuntosBtn',function(){
+		if ($('#articulos').val() != ''){
+			swal({
+			    title 				: '<i>CONFIRMACIÓN</i>',
+			    input 				: 'text',
+			    type 				: 'info',
+			    html  				: '<p>Esta seguro de asignar los puntos al articulo: <br><h1><b>'+$('#articulos').val()+'<b></h1></p><br>',
+			    allowOutsideClick 	: false,
+				preConfirm : function(result){
+					return new Promise(function(resolve,reject){
+									if(result == ''){
+										reject('El campo no puede ir vacio.');
+									}
+									if(result == '0'){
+										reject('El valor debe ser mayor a 0.');
+									}
+									resolve(result);
+								})
+			    }
+			}).then(function(result) {
+			    if( result !== '' ){
+			    	puntosPremia = result;
+			    	codigoArti = $('#articulos').val();
+			    	data = {puntosPremia:puntosPremia,codigoArti:codigoArti};          	
+					$.ajax({
+						beforeSend  : function(){
+				                $('body').attr('data-msj', 'Procesando Actualización ...');
+				                $('body').addClass('load-ajax');
+				            },
+				            url         : 'Configpuntoslealtad/updatearticulos',
+				            type        : 'POST',
+				            dataType    : 'JSON',
+				            data        : data,
+				            success: function (data){
+				                console.log(data);
+				                $('body').removeClass('load-ajax');
+				                $('#tablaAplicaPuntos').DataTable().ajax.reload();
+				                swal('Aviso','El articulo: <b>'+codigoArti+'</b> se ha <u style="color:green">'+data.msg+'</u>','info');
+				            }
+					});
+			    }
+			});
+		}else{
+			swal('Aviso','Debe seleccionar un articulo antes de continuar','warning');
+		}
+	});
+</script>

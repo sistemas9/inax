@@ -1,0 +1,249 @@
+<style type="text/css">
+	.invalid {
+		border-color : red;
+	}
+	.load-ajax:before {
+	    content: attr(data-msj);
+	    position: fixed;
+	    z-index: 1000;
+	    color: #ffffff;
+	    background-color: #000000;
+	    padding: 16px 32px 16px 78px;
+	    border-radius: 3px;
+	    bottom: 10px;
+	    left: 10px;
+	    font-weight: 500;
+	    background-image: url(http://www.justluxe.com/best-of-luxury/images/bol-loading.gif);
+	    background-size: 220px;
+	    background-repeat: no-repeat;
+	    background-position: -70px center;
+	    font-size: 16px;
+	    box-shadow: -5px 5px 20px 0px;
+	    transition: .3s;
+	    opacity: 0.85;}
+
+	.load-ajax:after {
+	  background-image: url(http://uploads.webflow.com/559af9ae30c483ec74512c38/54f4ca1edced7ed62ba934b4_infinite-gif-preloader.gif), white;
+	  background-position: center center;
+	  background-size: 216px;
+	  border-radius: 50%;
+	  bottom: 18px;
+	  content: '';
+	  height: 40px;
+	  left: 30px;
+	  position: absolute;
+	  width: 40px;
+	  z-index: 1000;
+	}
+</style>
+<script type="text/javascript">
+	$('#rutaReal').remove();
+</script>
+<script src="<?= JAVASCRIPT_PATH ?>/views/buscarprecios.js?v=<?php echo rand(1,1000); ?>" type="text/javascript"></script>
+<div class="alert alert-danger" role="alert" style="display:none;" id="alertFaltaCampos">
+	Los campos en rojo son obligatorios.
+	<button type="button" class="close" aria-label="Close" onclick="$('#alertFaltaCampos').hide();">
+		<span aria-hidden="true">&times;</span>
+	</button>
+</div>
+<div class="card" style="min-height: 400px;background-color:#eaeaea;box-shadow: 2px 5px 2px #ddd;">
+	<div class="card-content">
+		<div class="row">
+			<div class="col-md-12" style="text-align: center;">
+				<label style="color: #337AB7;font-size: 20px;font-weight: bolder;">PRECIOS Y DESCUENTOS</label>
+			</div>
+		</div>
+		<br/>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="col-md-4">
+					<label style="color: #337AB7">Codigo de cliente</label>
+					<select class="form-control required" id="cliente" style="width: 100%">
+					</select>
+				</div>
+				<div class="col-md-4">
+					<label style="color: #337AB7">Codigo de articulo</label>
+					<select class="form-control required" id="codigoArticulo" style="width: 100%">
+					</select>
+				</div>
+				<div class="col-md-1">
+					<label style="color: #337AB7">Cantidad</label>
+					<input type="number" id="cantidad" min="1" class="form-control required" style="width:100%" value="1.00" step=".01"/>
+				</div>
+				<div class="col-md-3">
+					<label style="color: #337AB7">Fecha</label>
+					<input type="date" id="fecha" class="form-control" style="width:100%" readonly/>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<button class="btn btn-default pull-right" id="btnConsultar" style="color: #337AB7">Consultar</button>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="col-md-3">
+					<label style="color: #337AB7;font-size:12px">Lista de Precios</label>
+					<input type="text" id="listaPrecios" class="form-control" style="height:20px;width:35%;font-size:12px;color: #337AB7;font-weight: bolder" readonly />
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="col-md-3">
+					<label style="color: #337AB7;font-size:12px">Descuentos de Linea</label>				
+					<input type="text" id="descuentoLinea" class="form-control" style="height:20px;width:35%;font-size:12px;color: #337AB7;font-weight: bolder" readonly />
+				</div>
+			</div>
+		</div>
+		<hr style="border-color: #CCC">
+		<div class="row">
+			<div class="col-md-12" style="min-height:400px">
+				<div class="row">
+					<div class="col-md-12">
+						<!-- <div class="col-md-4"></div> -->
+						<div class="col-md-4">
+							<label style="color: #337AB7;font-size: 15px;font-weight: bolder;">MEJOR PRECIO ENCONTRADO</label>
+						</div>
+						<!-- <div class="col-md-4"></div> -->
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-3">
+							<label style="color: #337AB7">Monto neto</label>
+							<input type="text" step="0.01" class="form-control priceDetail" id="montoneto" style="width:50%" readonly/>
+						</div>
+						<div class="col-md-3">
+							<label style="color: #337AB7">Monto neto I.V.A.</label>
+							<input type="text" step="0.01" class="form-control priceDetail" id="montonetoIVA" style="width:50%" readonly/>
+						</div>
+						<div class="col-md-3">
+							<label style="color: #337AB7">Monto neto I.V.A. Frontera</label>
+							<input type="text" step="0.01" class="form-control priceDetail" id="montonetoIVAFrontera" style="width:50%" readonly/>
+						</div>
+						<div class="col-md-3" style="display:none;">
+							<label style="color: #337AB7">Moneda</label>
+							<input type="text" class="form-control priceDetail" id="moneda" style="width:50%;text-transform: uppercase;" readonly/>
+						</div>
+					</div>
+				</div>
+				<br>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-6">
+							<label style="color: #337AB7">ACUERDOS DE PRECIOS Y DESCUENTOS</label>
+							<br>
+							<div class="row">
+								<div class="col-md-12">
+									<div class="col-md-4">
+										<label style="color: #337AB7">Precio</label>
+										<input type="text" step="0.01" class="form-control priceDetail" id="precioAcuerdo" style="width:50%" readonly/>
+									</div>
+									<div class="col-md-4">
+										<label style="color: #337AB7">Descuento</label>
+										<input type="number" step="0.01" class="form-control priceDetail" id="descuentoAcuerdo" style="width:50%" readonly/>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<div class="col-md-4">
+										<label style="color: #337AB7">Precio unitario</label>
+										<input type="number" step="0.01" class="form-control priceDetail" id="punitarioAcuerdo" style="width:50%" readonly/>
+									</div>
+									<div class="col-md-4">
+										<label style="color: #337AB7">Porcentaje de descuento 1</label>
+										<input type="number" step="0.01" class="form-control priceDetail" id="porcDesc1Acuerdo" style="width:50%" readonly/>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<div class="col-md-4">
+										<label style="color: #337AB7">Unidad</label>
+										<input type="text" class="form-control priceDetail" id="unidadAcuerdo" style="width:50%;text-transform: uppercase;" readonly/>
+									</div>
+									<div class="col-md-4">
+										<label style="color: #337AB7">Porcentaje de descuento 2</label>
+										<input type="number" step="0.01" class="form-control priceDetail" id="porcDesc2Acuerdo" style="width:50%" readonly/>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3" style="display:none;">
+							<label style="color: #337AB7">PRECIO DEL PRODUCTO</label>
+							<br>
+							<div class="row">
+								<div class="col-md-12">
+									<label style="color: #337AB7">Precio de venta</label>
+									<input type="number" step="0.01" class="form-control priceDetail" id="preciovtaPrecio" style="width:25%" readonly/>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<label style="color: #337AB7">Unidad</label>
+									<input type="text" class="form-control priceDetail" id="unidadPrecio" style="width:25%" readonly/>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3" style="display:none;">
+							<label style="color: #337AB7">COSTE DE PRODUCTOS</label>
+							<br>
+							<div class="row">
+								<div class="col-md-12">
+									<label style="color: #337AB7">Precio de compra</label>
+									<input type="number" step="0.01" class="form-control priceDetail" id="preciocompraCoste" style="width:25%" readonly/>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<label style="color: #337AB7">Unidad</label>
+									<input type="text" class="form-control priceDetail" id="unidadCoste" style="width:25%" readonly/>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	cargarClientes(<?= $this->cliente ?>);
+	cargarItems(<?php print_r($this->art); ?>,<?php print_r($this->art2); ?>);
+	$('#fecha').change(function(){
+	    $('#fecha').removeClass('invalid');
+	});
+
+	$('#cantidad').change(function(){
+	    $('#cantidad').removeClass('invalid');
+	});
+	$('#btnConsultar').on('click',function(){
+		valido = validarCamposConsulta()
+		if (valido){
+			consultarDatosPrecio();
+		}else{
+			$.notify(
+            {
+                message: "Datos faltantes favor de rellenar los campos obligatorios.",
+                delay:500,
+                animate: {
+                    enter: 'animated fadeInRight',
+                    exit: 'animated fadeOutRight'
+                }
+            },
+            {
+                type : 'danger'
+            });
+            $('#alertFaltaCampos').show();
+		}
+	});
+	$('.required').change(function(){
+		$('.priceDetail').val('');
+	});
+	$(document).ready(function(){
+		date = new Date();
+		fechaAct = date.getFullYear()+'-'+( (date.getMonth()+1)<10?'0'+(date.getMonth()+1):(date.getMonth()+1) )+'-'+ date.getDate();
+		$('#fecha').val(fechaAct)
+	});
+</script>

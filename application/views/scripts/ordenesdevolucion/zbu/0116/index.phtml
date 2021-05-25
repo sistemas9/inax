@@ -1,0 +1,57 @@
+<form name="devolucion" id="devolucion">
+<div class="row">
+	<div class="col-md-6">
+		<label for="">Cliente</label>
+		<input class="form-control ui-autocomplete-input" autocomplete="On" id="cliente" type="text" name="cliente">
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-6">
+		<label for="">Factura a devolver</label>
+		<input class="form-control" id="factura" type="text" name="factura">
+	</div>
+	<div class="col-md-6">
+		<button type="button" class="btn btn-default" onclick="enviar()">Enviar</button>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-6">
+		<label for="">Articulos</label>
+	</div>
+	<div class="col-md-6">
+		<label for="">Cantidad</label>
+	</div>
+</div>
+<div class="row" >
+	<div class="col-md-6"id="artis" name="artis">
+		<select name="lineas" id="lineas" class="form-control">
+			<option value="">0</option>
+		</select>
+	</div>
+	<div class="col-md-3"id="artis2" name="artis2">
+		<select name="cantidad" id="cantidad" class="form-control">
+			<option value="">0</option>
+		</select>
+	</div>
+	<div class="col-md-3"id="artis3" name="artis2">
+	</div>
+</form>
+<div class="row col-md-12">
+	<button type="button" class="btn btn-default" onclick="devolvers()" style="display:none" id ="devolver">Devolver</button>
+</div>
+<script src="<?= JAVASCRIPT_PATH ?>/views/ordenesDevolucion.js?v=<?php echo date("dh"); ?>" type="text/javascript"></script>
+
+
+<!-- 
+mostrar las lineas
+
+
+seleccionar las lineas a decivkevor
+
+
+las cantidades 39/40
+
+-1
+
+que no sean de servicio
+-->

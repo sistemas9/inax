@@ -1,0 +1,68 @@
+<style type="text/css">
+	th { 
+		font-size: 12px; 
+	}
+	td { 
+		font-size: 11px; 
+	}
+</style>
+<!-- Modal loading -->
+<div id="modalLoading" class="modal light-blue darken-3" style="width: 25%">
+    <div class="modal-content" style="border: solid 2px #01579b">
+        <div style="text-align: center">
+            <div class="preloader-wrapper big active">
+                <div class="spinner-layer spinner-red-only">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="gap-patch">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h5 style="color: white">Sus datos se estan cargando...</h5>
+    </div>
+</div>
+<!--   end modal loading    --> 
+<div class="row">
+	<div class="col l12 m12 s12" style="text-align: center;">
+		<h4>CONFIGURACIÓN MSI(MESES SIN INTERESES)</h4>
+	</div>
+</div>
+<hr/>
+<div class="row">
+	<div class="col l12 m12 s12 orange lighten-1">
+		<h5>
+			Los nuevos tipos de pago seran dados de alta en Dynamics 365&copy;, los mostrados aqui se podran modificar solamente su porcentaje de cargo o incremento adicional por usar meses sin interes. 
+		</h5>
+	</div>
+</div>
+<hr/>
+<div class="row">
+	<div class="col l12 m12 s12">
+		<table id="tablaMSI" class="table">
+			<thead>
+				<tr>
+					<th>TIPO PAGO</th>
+					<th>DESCRIPCIÓN</th>
+					<th>VALOR %</th>
+					<th>MONTO MINIMO</th>
+					<th>ACCIONES</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div>
+</div>
+<script type="text/javascript" src="../application/assets/js/views/msi.js"></script>
+<script type="text/javascript">
+	$('#rutaReal').remove();
+	$(document).ready(function(){
+		cargarDatosMSI();
+	});
+</script>

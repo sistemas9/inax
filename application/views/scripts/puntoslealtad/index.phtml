@@ -1,0 +1,150 @@
+<link rel="stylesheet" href="../application/assets/css/jquery.paginate.css">
+<script src="<?= JAVASCRIPT_PATH ?>/views/puntoslealtad.js?v=<?php echo rand(1,1000); ?>" type="text/javascript"></script>
+<style type="text/css">
+	.itemDisabled {
+		border-color: #CCC !important;
+		border : solid 1px;
+	}
+
+	.itemContainerDis {
+		border-color: #CCC !important;
+		border : solid 2px;
+		border-radius: 10px;
+	}
+
+	.itemAvailable{
+		border-color: #01579B !important;
+		border : solid 1px;
+	}
+
+	.itemContainerAvail {
+		border-color: #01579B !important;
+		border : solid 2px;
+		border-radius: 10px;
+	}
+
+	.itemContainerAvail:hover{
+		border : solid 4px;
+		background-color: azure;
+	}
+
+	.itemContainerSelected {
+		border-color: #01579B !important;
+		border : solid 4px;
+		border-radius: 10px;
+		background-color: azure;
+	}
+
+	.load-ajax:before {
+	    content: attr(data-msj);
+	    position: fixed;
+	    z-index: 1000;
+	    color: #ffffff;
+	    background-color: #000000;
+	    padding: 16px 32px 16px 78px;
+	    border-radius: 3px;
+	    bottom: 10px;
+	    left: 10px;
+	    font-weight: 500;
+	    background-image: url(http://www.justluxe.com/best-of-luxury/images/bol-loading.gif);
+	    background-size: 220px;
+	    background-repeat: no-repeat;
+	    background-position: -70px center;
+	    font-size: 16px;
+	    box-shadow: -5px 5px 20px 0px;
+	    transition: .3s;
+	    opacity: 0.85;}
+
+	.load-ajax:after {
+	  background-image: url(http://uploads.webflow.com/559af9ae30c483ec74512c38/54f4ca1edced7ed62ba934b4_infinite-gif-preloader.gif), white;
+	  background-position: center center;
+	  background-size: 216px;
+	  border-radius: 50%;
+	  bottom: 18px;
+	  content: '';
+	  height: 40px;
+	  left: 30px;
+	  position: absolute;
+	  width: 40px;
+	  z-index: 1000;
+	}
+</style>
+<div class="card" style="min-height: 700px;background-color:#eaeaea;box-shadow: 2px 5px 2px #ddd;">
+	<div class="card-content">
+		<div class="row">
+			<div class="col-md-12">
+				<h4 style="background-color: #01579B; color:white;; padding-top: 10px;padding-bottom: 10px;padding-left: 5px;border-radius: 5px;"><i class="fa fa-user"></i> INFORMACION DEL CLIENTE</h4>
+			</div>	
+		</div>
+		<div class="row">
+			<div class="col-md-4">
+				<label>Cliente</label>
+				<select id="clientes"></select>
+			</div>
+			<div class="col-md-4">
+			</div>
+			<div class="col-md-2">
+				<label>Puntos Lealtad</label>
+				<button type="btn" class="form-control" id="puntos" disabled> 0 </button>
+			</div>
+			<div class="col-md-2">
+				<label>Confirmar Intercambio</label>
+				<button type="btn" class="form-control" id="confirmarInter" onclick="confirmExchange()"> Confirmar </button>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<h4 style="background-color: #01579B; color:white; padding-top: 10px;padding-bottom: 10px;padding-left: 5px;border-radius: 5px;"><i class="fa fa-cubes"></i> ARTICULOS</h4>
+			</div>
+		</div>
+		<div class="card-content">
+			<div class="col-md-12" style="text-align: right;background-color: #01579B; color:white; border-radius: 5px;">
+				<span id="puntosRestantes" style="font-size: 18px;font-weight: bolder;">
+					<b><u>PUNTOS RESTANTES</u></b>: 
+				</span>
+			</div>
+			<div class="col-md-12" id="contenedorArticulos">
+			</div>
+		</div>
+	</div>
+</div>
+<script src="<?= JAVASCRIPT_PATH ?>/jquery.paginate.js"></script>
+<script type="text/javascript">
+	var items 			= <?= $this->artPremio ?>;
+	var personnelNumber = '<?= $this->worker ?>';
+	cargarClientes(<?= $this->cliente ?>);
+	renderArticulosCanvas();
+	setTimeout(function(){},500);
+	$('#contenedorArticulos').paginate({
+		useHashLocation : false
+	});
+
+	$(document).on('click','.itemContainerAvail',function(){
+		puntosItem = $(this).data('puntos');
+		itemNumber = $(this).data('itemnumber');
+		if (puntosCliente >= puntosItem && !$(this).hasClass('itemContainerSelected')){
+			$(this).removeClass('.itemContainerAvail');
+			$(this).addClass('itemContainerSelected');
+			recalcularPuntos(puntosItem,'reduce');
+			spanCuantos = $(this).children('.cuantosArtis');
+			$(spanCuantos).html('&nbsp;1&nbsp;');
+			// $(spanCuantos).show();
+			data = {'SalesQuotationNumber' : '', 'ItemNumber' : itemNumber};
+			Cotizacion.setLines(data);
+		}else{
+			if ( $(this).hasClass('itemContainerSelected') ){
+				swal("ALTO","Articulo ya seleccionado. El articulo volvera a estar disponible y sus puntos restablecidos",'info');
+				$(this).removeClass('itemContainerSelected');
+				$(this).addClass('.itemContainerAvail');
+				recalcularPuntos(puntosItem,'add');
+				spanCuantos = $(this).children('.cuantosArtis');
+				$(spanCuantos).html('&nbsp;0&nbsp;');
+				// $(spanCuantos).hide();
+				data = {'SalesQuotationNumber' : '', 'ItemNumber' : itemNumber};
+				Cotizacion.removeLines(data);
+			}else{
+				swal("ALTO","No cuenta con los puntos requeridos para intercambiar este Articulo.",'info');
+			}
+		}
+	});
+</script>
