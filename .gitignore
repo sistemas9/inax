@@ -28,3 +28,6 @@
 /application/models/UserConstants.php
 /public/index.php
 /library/includes/tokenClass/tokenClass.php
+/application/configs/application_dev.ini
+/application/configs/application.ini
+application/configs/application_dev.ini

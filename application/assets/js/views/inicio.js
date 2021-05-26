@@ -7,6 +7,7 @@ var parcelLabelSubmited = false;
 editionPromoCodeSelected = "None";
 promoCodeBeenRemoved = false;
 
+
 function loaderSwal(){
     // Swal.fire({
     //   title: 'Cargando',
@@ -880,10 +881,8 @@ function mostrarModalEti(imgPath = '../application/assets/img') {
     if (parcelLabelSubmited) {
         Materialize.toast('Esta cotizacion ya cuenta con una etiqueta, se actualizara por la generada', 3000, 'blue');
     }
-    var sitio = $("#sitioclte").val();
+    var sitio = $("#sitioLineas option:selected").val();
     var ov = $('#DocumentId2').val();
-    console.log(ov);
-    console.log(ov);
     $('#modalEtiquetas').openModal({
         dismissible: false,
         ready: function () {
@@ -907,8 +906,13 @@ function mostrarModalEti(imgPath = '../application/assets/img') {
             var htmlsitio = "";
             var selected = "";
             for (var k in sitios2) {
-                if (sitios2[k].SITEID == sitio) { selected = "selected"; } else { selected = ""; }
-                htmlsitio += '<option value="' + sitios2[k].SITEID + '" ' + selected + '>' + sitios2[k].NAME + '</option>';
+                if (sitios2[k].SITEID == sitio) { 
+                    selected = "selected"; 
+                    htmlsitio += '<option value="' + sitios2[k].SITEID + '" ' + selected + '>' + sitios2[k].NAME + '</option>';
+                } else { 
+                    selected = ""; 
+                }
+                // htmlsitio += '<option value="' + sitios2[k].SITEID + '" ' + selected + '>' + sitios2[k].NAME + '</option>';
             }
             $('#sitioEtiquetas').html(htmlsitio);
             $('#sitioEtiquetas').val(sitio);
