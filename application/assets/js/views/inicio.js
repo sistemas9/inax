@@ -7,6 +7,7 @@ var parcelLabelSubmited = false;
 editionPromoCodeSelected = "None";
 promoCodeBeenRemoved = false;
 
+
 function loaderSwal(){
     // Swal.fire({
     //   title: 'Cargando',
