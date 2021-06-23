@@ -276,6 +276,7 @@ $(document).on('click','#CancelarExistencias,#CancelarActualizarEncabezado',func
                                                             $("#Facturar").hide();
                                                             $("#Remisionar_Facturar").hide();
                                                             $("#GenerarREM").hide();
+                                                            $('#ConfirmarTransfer').show();
                                                         }
                                                         else {
                                                             $("#Facturar").show();
@@ -287,6 +288,7 @@ $(document).on('click','#CancelarExistencias,#CancelarActualizarEncabezado',func
                                                             $("#GenerarWPAY").show()
                                                             $("#GenerarREM").hide();
                                                         }
+                                                        if (efect == '03') $('#ConfirmarTransfer').show();
                                                     }
                                                 } else {
                                                     $("#Facturar").show();
@@ -294,6 +296,7 @@ $(document).on('click','#CancelarExistencias,#CancelarActualizarEncabezado',func
                                                     if (efect == '04' || efect == '28') {
                                                         $("#GenerarWPAY").show()
                                                     }
+                                                    if (efect == '03') $('#ConfirmarTransfer').show();
                                                 }
                                             }
                                             else {
@@ -305,6 +308,7 @@ $(document).on('click','#CancelarExistencias,#CancelarActualizarEncabezado',func
                                                     if (efect == '04' || efect == '28') {
                                                         $("#GenerarWPAY").show()
                                                     }
+                                                    if (efect == '03') $('#ConfirmarTransfer').show();
                                                 }
 
                                             }
@@ -430,6 +434,7 @@ $(document).on('click','#CancelarExistencias,#CancelarActualizarEncabezado',func
                                                     $("#Facturar").hide();
                                                     $("#Remisionar_Facturar").hide();
                                                     $("#GenerarREM").hide();
+                                                    $('#ConfirmarTransfer').show();
                                                 }
                                                 else {
                                                     $("#Facturar").show();
@@ -441,6 +446,7 @@ $(document).on('click','#CancelarExistencias,#CancelarActualizarEncabezado',func
                                                     $("#GenerarWPAY").show()
                                                     $("#GenerarREM").hide();
                                                 }
+                                                if (efect == '03') $('#ConfirmarTransfer').show();
                                             }
                                         } else {
                                             $("#Facturar").show();
@@ -448,6 +454,7 @@ $(document).on('click','#CancelarExistencias,#CancelarActualizarEncabezado',func
                                             if (efect == '04' || efect == '28') {
                                                 $("#GenerarWPAY").show()
                                             }
+                                            if (efect == '03') $('#ConfirmarTransfer').show();
                                         }
                                     }
                                     else {
@@ -459,6 +466,7 @@ $(document).on('click','#CancelarExistencias,#CancelarActualizarEncabezado',func
                                             if (efect == '04' || efect == '28') {
                                                 $("#GenerarWPAY").show()
                                             }
+                                            if (efect == '03') $('#ConfirmarTransfer').show();
                                         }
 
                                     }
@@ -3533,6 +3541,7 @@ $(document).on('click','#actionArticulos',function(e){
                                         $("#Facturar").hide();
                                         $("#Remisionar_Facturar").hide();
                                         $("#GenerarREM").hide();
+                                        $('#ConfirmarTransfer').show();
                                     }
                                     else {
                                         $("#Facturar").show();
@@ -3544,6 +3553,7 @@ $(document).on('click','#actionArticulos',function(e){
                                         $("#GenerarWPAY").show()
                                         $("#GenerarREM").hide();
                                     }
+                                    if (efect == '03') $('#ConfirmarTransfer').show();
                                 }
                             } else {
                                 $("#Facturar").show();
@@ -3559,6 +3569,7 @@ $(document).on('click','#actionArticulos',function(e){
                                 if (efect == '04' || efect == '28') {
                                     $("#GenerarWPAY").show()
                                 }
+                                if (efect == '03') $('#ConfirmarTransfer').show();
                             }
 
                         }
@@ -3843,6 +3854,7 @@ function initResumenTestDiv() {
                                     $("#Facturar").hide();
                                     $("#Remisionar_Facturar").hide();
                                     $("#GenerarREM").hide();
+                                    $('#ConfirmarTransfer').show();
                                 } else {
                                     $("#Facturar").show();
                                     $("#GenerarREM").show();
@@ -3853,6 +3865,7 @@ function initResumenTestDiv() {
                                     $("#GenerarWPAY").show()
                                     $("#GenerarREM").hide();
                                 }
+                                if (efect == '03') $('#ConfirmarTransfer').show();
                             }
                         } else {
                             $("#Facturar").show();
@@ -3860,6 +3873,7 @@ function initResumenTestDiv() {
                             if (efect == '04' || efect == '28') {
                                 $("#GenerarWPAY").show()
                             }
+                            if (efect == '03') $('#ConfirmarTransfer').show();
                         }
                     }
                     else {
@@ -3871,6 +3885,7 @@ function initResumenTestDiv() {
                             if (efect == '04' || efect == '28') {
                                 $("#GenerarWPAY").show()
                             }
+                            if (efect == '03') $('#ConfirmarTransfer').show();
                         }
                     }
                     $("#OrdenVentaRem").val($('#DocumentId2').val());
@@ -4444,4 +4459,30 @@ function getZPLData(){
     var dataZPL = {RFCCompany,calleCompany,colCompany,estadoCompany,telCompany,usuarioVenta,creacionFecVenta,ovCompleto,montoVenta,precaucion,emailCliente,comentarios,RFCCliente,calleCliente,colCliente,estadoCliente,telefonoCliente,paqueteriaVenta,seguroVenta};
 
     return dataZPL;
+}
+
+/** Esta funcion es para solicitar
+    la confirmacion de la transferencia
+**/
+function applyCreditRequest(){
+    var data = {
+                     OV: $('#DocumentIdResumen').html()
+                    ,RequestType: ( $('#pagolineas option:selected').data('paymmode') == '99' ) ? '1' : '2'
+                    ,ClientCode : $('#claveclteResumen').html()
+                    ,ClientName : $('#desccliente').html()   
+                    ,OrderTakerCode : $('#secretarioventa').val()
+                    ,Status : 0
+                    ,OvAmount : $('#totalResumen').html().replace('$','').replace(',','')
+                    ,OrderTakerName : $('#vendedor').html()
+                    ,Zone : $('#sitioLineas').val()
+                }
+    $.ajax({
+        url : 'inicio/applycreditrequest',
+        type: 'POST',
+        dataType: 'JSON',
+        data : {data},
+        success : function(res){
+            console.log(res);
+        }
+    });
 }

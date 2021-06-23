@@ -3642,7 +3642,7 @@ class Application_Model_InicioModel {
 
                 $response = curl_exec(CURL1);
                 $err = curl_error(CURL1);
-                //print_r($response);
+                // print_r($response);exit('ppp');
                 //print_r($CURLOPT_POSTFIELDS);
                 //print_r($responseAddress);
                 //die();
@@ -6889,5 +6889,71 @@ static function reviewCreditLimit($customer,$ordenVenta,$montoCoti='',$tipopago)
         $info['existe'] = true;
       }
       return $info;
+    }
+
+    public static function ApplyCreditRequest($creditRequest){
+      $token = new Token();
+      $ov = $creditRequest['OV'];
+      $curl = curl_init();
+      curl_setopt_array($curl, [
+        CURLOPT_URL => "https://".DYNAMICS365."/Data/SalesOrderHeadersV2?%24filter=SalesOrderNumber%20eq%20'".$ov."'",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => "",
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "GET",
+        CURLOPT_POSTFIELDS => "",
+        CURLOPT_COOKIE => "ApplicationGatewayAffinity=e7fb295f94cb4b5e0cd1e2a4712e4a803fc926342cc4ecca988f29125dbd4b04; ARRAffinity=dcb76979b784a1f85f17f2b977b7d851aad42c68a3aba6e28de4029069113332",
+        CURLOPT_HTTPHEADER => [
+          "Authorization: Bearer ".$token->getToken()[0]->Token."",
+          "Content-Type: application/json"
+        ],
+      ]);
+
+      $response = curl_exec($curl);
+      $err = curl_error($curl);
+
+      curl_close($curl);
+
+      if ($err) {
+        echo "cURL Error #:" . $err;
+      } else {
+        $resultOv = json_decode($response);
+        $date = new DateTime($resultOv->value[0]->OrderCreationDateTime);
+        $date->setTimezone(new DateTimeZone('America/Chihuahua'));
+
+        (CONFIG==DESARROLLO) ? $conn = new DB_Conexion():$conn = new DB_ConexionExport();  
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $queryInsertCredit = "INSERT INTO [dbo].[AYT_CreditRequest]
+                                     ([Ov]
+                                     ,[RequestType]
+                                     ,[ClientCode]
+                                     ,[ClientName]
+                                     ,[OrderTakerCode]
+                                     ,[InsertDate]
+                                     ,[Status]
+                                     ,[OvAmmount]
+                                     ,[OrderTakerName]
+                                     ,[Zone]
+                                     ,[OrderCreationDateTime])
+                              VALUES
+                                     ('".$creditRequest['OV']."'
+                                     ,'".$creditRequest['RequestType']."'
+                                     ,'".$creditRequest['ClientCode']."'
+                                     ,'".$creditRequest['ClientName']."'
+                                     ,'".$creditRequest['OrderTakerCode']."'
+                                     , GETDATE()
+                                     ,'".$creditRequest['Status']."'
+                                     ,'".$creditRequest['OvAmount']."'
+                                     ,'".$creditRequest['OrderTakerName']."'
+                                     ,'".$creditRequest['Zone']."'
+                                     ,'".$date->format('Y-m-d H:i:s')."')";
+        $query = $conn->prepare($queryInsertCredit);
+        $query->execute();
+        $resultInsert = $query->rowCount();
+
+        return ($resultInsert > 0) ? 'Exito' : 'Error';
+      }
     }
 }   
