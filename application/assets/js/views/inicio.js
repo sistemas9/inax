@@ -4480,8 +4480,13 @@ function applyCreditRequest(){
         url : 'inicio/applycreditrequest',
         type: 'POST',
         dataType: 'JSON',
+        beforeSend : function (res){
+            $('#modalLoading').openModal();
+        }
         data : {data},
         success : function(res){
+            $('#modalLoading').closeModal()
+            Materialize.toast('Operacion realizada con exito.', 3000);
             console.log(res);
         }
     });
