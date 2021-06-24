@@ -4482,7 +4482,7 @@ function applyCreditRequest(){
         dataType: 'JSON',
         beforeSend : function (res){
             $('#modalLoading').openModal();
-        }
+        },
         data : {data},
         success : function(res){
             $('#modalLoading').closeModal()
