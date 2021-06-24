@@ -4485,8 +4485,7 @@ function applyCreditRequest(){
         },
         data : {data},
         success : function(res){
-            $('#modalLoading').closeModal()
-            Materialize.toast('Operacion realizada con exito.', 3000);
+            $('#modalLoading').closeModal();
             console.log(res);
         }
     });
