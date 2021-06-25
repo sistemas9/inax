@@ -4546,7 +4546,7 @@ function SaveAttachments(RequestId, Ov, images){
         formData.append('MessageFrom', 1);
         formData.append('DateTime', '1900-01-01T12:00:00.00Z');
         $.ajax({
-            url : 'https://localhost:5001/api/CreditRequestsApi/UploadFiles',
+            url : 'https://ayt-apps.eastus.cloudapp.azure.com/ApiCreditRequests/api/CreditRequestsApi/UploadFiles',
             type: 'POST',
             crossDomain:true,
             mimeType: "multipart/form-data",
