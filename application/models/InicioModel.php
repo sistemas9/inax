@@ -6891,9 +6891,11 @@ static function reviewCreditLimit($customer,$ordenVenta,$montoCoti='',$tipopago)
       return $info;
     }
 
-    public static function ApplyCreditRequest($creditRequest){
+    public static function ApplyCreditRequest($creditRequest, $files){
       $token = new Token();
+      $creditRequest = (array)$creditRequest;
       $ov = $creditRequest['OV'];
+
       $curl = curl_init();
       curl_setopt_array($curl, [
         CURLOPT_URL => "https://".DYNAMICS365."/Data/SalesOrderHeadersV2?%24filter=SalesOrderNumber%20eq%20'".$ov."'",
@@ -6925,35 +6927,54 @@ static function reviewCreditLimit($customer,$ordenVenta,$montoCoti='',$tipopago)
 
         (CONFIG==DESARROLLO) ? $conn = new DB_Conexion():$conn = new DB_ConexionExport();  
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $queryInsertCredit = "INSERT INTO [dbo].[AYT_CreditRequest]
-                                     ([Ov]
-                                     ,[RequestType]
-                                     ,[ClientCode]
-                                     ,[ClientName]
-                                     ,[OrderTakerCode]
-                                     ,[InsertDate]
-                                     ,[Status]
-                                     ,[OvAmmount]
-                                     ,[OrderTakerName]
-                                     ,[Zone]
-                                     ,[OrderCreationDateTime])
-                              VALUES
-                                     ('".$creditRequest['OV']."'
-                                     ,'".$creditRequest['RequestType']."'
-                                     ,'".$creditRequest['ClientCode']."'
-                                     ,'".$creditRequest['ClientName']."'
-                                     ,'".$creditRequest['OrderTakerCode']."'
-                                     , GETDATE()
-                                     ,'".$creditRequest['Status']."'
-                                     ,'".$creditRequest['OvAmount']."'
-                                     ,'".$creditRequest['OrderTakerName']."'
-                                     ,'".$creditRequest['Zone']."'
-                                     ,'".$date->format('Y-m-d H:i:s')."')";
-        $query = $conn->prepare($queryInsertCredit);
-        $query->execute();
-        $resultInsert = $query->rowCount();
 
-        return ($resultInsert > 0) ? 'Exito' : 'Error';
+        $queryCheckCR = "SELECT COUNT(Id) AS cuantos, Id
+                         FROM AYT_CreditRequest
+                         WHERE Ov = '".$creditRequest['OV']."' 
+                         AND ClientCode = '".$creditRequest['ClientCode']."' 
+                         AND OrderTakerCode = '".$creditRequest['OrderTakerCode']."'
+                         AND Zone = '".$creditRequest['Zone']."'
+                         GROUP BY Id;";
+        $query2 = $conn->prepare($queryCheckCR);
+        $query2->execute();
+        $resultCuantos = $query2->fetchAll(PDO::FETCH_ASSOC);
+
+        $resultInsert = 0;
+        if ($resultCuantos[0]['cuantos'] == 0){
+          $queryInsertCredit = "INSERT INTO [dbo].[AYT_CreditRequest]
+                                       ([Ov]
+                                       ,[RequestType]
+                                       ,[ClientCode]
+                                       ,[ClientName]
+                                       ,[OrderTakerCode]
+                                       ,[InsertDate]
+                                       ,[Status]
+                                       ,[OvAmmount]
+                                       ,[OrderTakerName]
+                                       ,[Zone]
+                                       ,[OrderCreationDateTime])
+                                OUTPUT inserted.Id
+                                VALUES
+                                       ('".$creditRequest['OV']."'
+                                       ,'".$creditRequest['RequestType']."'
+                                       ,'".$creditRequest['ClientCode']."'
+                                       ,'".$creditRequest['ClientName']."'
+                                       ,'".$creditRequest['OrderTakerCode']."'
+                                       , GETDATE()
+                                       ,'".$creditRequest['Status']."'
+                                       ,'".$creditRequest['OvAmount']."'
+                                       ,'".$creditRequest['OrderTakerName']."'
+                                       ,'".$creditRequest['Zone']."'
+                                       ,'".$date->format('Y-m-d H:i:s')."');";
+          $query = $conn->prepare($queryInsertCredit);
+          $query->execute();
+          $resultRows = $query->rowCount();
+          $resultInsert = $query->fetchAll(PDO::FETCH_ASSOC);
+        }else{
+          $resultInsert = $resultCuantos[0]['cuantos'];
+        }
+
+        return ($resultInsert > 0) ? $resultInsert[0]['Id'] : 'Error';
       }
     }
 }   

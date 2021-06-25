@@ -2151,7 +2151,8 @@ public function getDireccionesAction() {
     
     public function applycreditrequestAction(){
         $creditRequest = filter_input_array(INPUT_POST);
-        $resultCredit = Application_Model_InicioModel::ApplyCreditRequest($creditRequest['data']);
+        $files = $_FILES;
+        $resultCredit = Application_Model_InicioModel::ApplyCreditRequest($creditRequest['data2'],$files);
         print_r($resultCredit);
         exit();
     }

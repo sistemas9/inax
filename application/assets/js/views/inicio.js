@@ -4465,7 +4465,7 @@ function getZPLData(){
     la confirmacion de la transferencia
 **/
 function applyCreditRequest(){
-    var data = {
+    var data2 = {
                      OV: $('#DocumentIdResumen').html()
                     ,RequestType: ( $('#pagolineas option:selected').data('paymmode') == '99' ) ? '1' : '2'
                     ,ClientCode : $('#claveclteResumen').html()
@@ -4476,17 +4476,97 @@ function applyCreditRequest(){
                     ,OrderTakerName : $('#vendedor').html()
                     ,Zone : $('#sitioLineas').val()
                 }
-    $.ajax({
-        url : 'inicio/applycreditrequest',
-        type: 'POST',
-        dataType: 'JSON',
-        beforeSend : function (res){
-            $('#modalLoading').openModal();
-        },
-        data : {data},
-        success : function(res){
-            $('#modalLoading').closeModal();
-            console.log(res);
+
+    html = '';
+    html += '<div class="row">';
+    html += '    <div class="col l12 m12 s12">';
+    html += '        <div class="card-panel yellow lighten-4">';
+    html += '            <div style="text-align:justify !important">Esta a punto de enviar una solicitud de confirmacion de transferencia al depatamento de credito y cobranza, si desea adjuntar un archivo de click en el boton de "Seleccionar Archivo". <br /><br /> Para completar el proceso favor de dar click en "Enviar solicitud" y un correo electronico estara llegando al departamento en cuestion.</div>';
+    html += '        </div>';
+    html += '    </div>';
+    html += '</div>';
+    html += '<div class="row">';
+    html += '    <div class="col m12 l12 s12">';
+    html += '        <label for="transferFile" class="waves-effect waves-light btn"><i class="material-icons right">cloud_upload</i>Seleccionar Archivo</label>';
+    html += '        <input type="file" id="transferFile" style="width:100%; display:none" />';
+    html += '    </div>';
+    html += '</div>';
+    html += '<div class="row">';
+    html += '    <div class="col m12 l12 s12">';
+    html += '       <span class="yellow lighten-4">Archivo seleccionado: </span><span id="archivo"></span>';
+    html += '    </div>';
+    html += '</div>';
+
+    swal({
+        title:'Confirmacion de Transferencia',
+        type : 'question',
+        html : html,
+        showCancelButton: true,
+        confirmButtonText:'Enviar solicitud',
+        cancelButtonText:'Cancelar'
+    }).then(function(res){
+        if (res){
+            var obj = $('#transferFile');
+            var ov = $('#DocumentIdResumen').html();
+            $.ajax({
+                url : 'inicio/applycreditrequest',
+                type: 'POST',
+                dataType: 'JSON',
+                data : {data2},
+                beforeSend : function (res){
+                    $('#modalLoading').openModal();
+                },
+                success : function(res){
+                    $('#modalLoading').closeModal();
+                    SaveAttachments(res,ov,obj);
+                    console.log(res);
+                }
+            });
         }
     });
 }
+
+
+/**
+Esta funcion es para guardar los datos adjuntos
+despues de crear la solicitud
+**/
+function SaveAttachments(RequestId, Ov, images){
+    var formData = new FormData();
+        var imagesCR = $(images)[0].files;
+        $(imagesCR).each(function (index) {
+            formData.append('Files', this);
+        });
+        formData.append('Id', 1);
+        formData.append('RequestId', RequestId);
+        formData.append('AttachmentType', 2);
+        formData.append('Ov', Ov);
+        formData.append('Message', 'Holiii');
+        formData.append('FileUrl', 'NO FILE');
+        formData.append('MessageFrom', 1);
+        formData.append('DateTime', '1900-01-01T12:00:00.00Z');
+        $.ajax({
+            url : 'https://localhost:5001/api/CreditRequestsApi/UploadFiles',
+            type: 'POST',
+            crossDomain:true,
+            mimeType: "multipart/form-data",
+            contentType: false,
+            cache: false,
+            processData: false,
+            data: formData,
+            beforeSend : function (res){
+                $('#modalLoading').openModal();
+            },
+            success : function(res){
+                $('#modalLoading').closeModal();
+                console.log(res);
+            }
+        });
+}
+
+/*** Evento para cambiar el archivo
+***/
+$(document).on('change','#transferFile', function(){
+    var arch = $('#transferFile')[0].files[0].name;
+    $('#archivo').html(arch);
+});
