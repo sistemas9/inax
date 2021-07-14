@@ -85,11 +85,15 @@
         .compactarHMF {
             padding-left: 55px;
         } 
+        .swal-wide{
+            height: 800px !important;
+        }
     </style>
 <script>
     var userBranchOffice = '<?= $_SESSION['sucursal'] ?>';
 </script>
 <!-- <script src="../application/assets/js/sweetalert28.js"></script> -->
+<script src="../application/assets/js/views/iFrame.js"></script>
 </head>
 <body onLoad="setInterval('verifica()',15000);">
     <script>flagFactura=<?php (!empty($_SESSION['factura'])) ? print_r(json_encode($_SESSION['factura'])) : print_r(json_encode(array())); ?>;</script>
@@ -303,6 +307,11 @@
                     Config. Liquidacion
                 </a>
             </li>-->
+            <li style="border-bottom: 1px solid #DDD;">
+                <a class="waves-effect waves-teal" style="padding: 0 0px;">
+                    <i class="fa fa-2x fa-search" style="color:#3385ff" onclick="iFrame();"></i> Herramienta de Ventas
+                </a>
+            </li>
             <li style="border-bottom: 1px solid #DDD;">
                 <a class="waves-effect waves-teal" style="padding: 0 0px; " href="../public/login">
                     <i class="fa fa-2x fa-sign-out" style="color:#ff0000"></i> Cerrar Sesión
