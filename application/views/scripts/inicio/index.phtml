@@ -1098,11 +1098,16 @@ if (isset($_POST['documentType'])) {
                                     <i class="material-icons left">spellcheck</i> Liberar a Almacen
                                 </a>
                             </div>
-			    <div class="col s3 m3 l3 xl3 center-align">
-        			<a class="btn cyan darken-4" id="GenerarWPAY" style="color: White; font-size: 12px;display: none;">
-            				<i class="material-icons left">spellcheck</i> Crear WEB PAY
-        			</a>
-    			    </div>
+            			    <div class="col s3 m3 l3 xl3 center-align">
+                    			<a class="btn cyan darken-4" id="GenerarWPAY" style="color: White; font-size: 12px;display: none;">
+                        				<i class="material-icons left">spellcheck</i> Crear WEB PAY
+                    			</a>
+            			    </div>
+                            <div class="col s3 m3 l3 xl3 center-align">
+                                <a class="btn cyan darken-4" id="ConfirmarTransfer" onclick="applyCreditRequest()" style="color: White; font-size: 12px;display: none;">
+                                        <i class="material-icons left">spellcheck</i> Solicitar Conf. Transferencia.
+                                </a>
+                            </div>
                             <div class="col s3 m3 l3 xl3 center-align">
                                 <a class="btn green darken-1" id="Facturar" style="display:none; color: White; font-size: 12px;">
                                     <i class="material-icons left">local_atm</i>Aplicar Pago

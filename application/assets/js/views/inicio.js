@@ -276,6 +276,7 @@ $(document).on('click','#CancelarExistencias,#CancelarActualizarEncabezado',func
                                                             $("#Facturar").hide();
                                                             $("#Remisionar_Facturar").hide();
                                                             $("#GenerarREM").hide();
+                                                            $('#ConfirmarTransfer').show();
                                                         }
                                                         else {
                                                             $("#Facturar").show();
@@ -287,6 +288,7 @@ $(document).on('click','#CancelarExistencias,#CancelarActualizarEncabezado',func
                                                             $("#GenerarWPAY").show()
                                                             $("#GenerarREM").hide();
                                                         }
+                                                        if (efect == '03') $('#ConfirmarTransfer').show();
                                                     }
                                                 } else {
                                                     $("#Facturar").show();
@@ -294,6 +296,7 @@ $(document).on('click','#CancelarExistencias,#CancelarActualizarEncabezado',func
                                                     if (efect == '04' || efect == '28') {
                                                         $("#GenerarWPAY").show()
                                                     }
+                                                    if (efect == '03') $('#ConfirmarTransfer').show();
                                                 }
                                             }
                                             else {
@@ -305,6 +308,7 @@ $(document).on('click','#CancelarExistencias,#CancelarActualizarEncabezado',func
                                                     if (efect == '04' || efect == '28') {
                                                         $("#GenerarWPAY").show()
                                                     }
+                                                    if (efect == '03') $('#ConfirmarTransfer').show();
                                                 }
 
                                             }
@@ -430,6 +434,7 @@ $(document).on('click','#CancelarExistencias,#CancelarActualizarEncabezado',func
                                                     $("#Facturar").hide();
                                                     $("#Remisionar_Facturar").hide();
                                                     $("#GenerarREM").hide();
+                                                    $('#ConfirmarTransfer').show();
                                                 }
                                                 else {
                                                     $("#Facturar").show();
@@ -441,6 +446,7 @@ $(document).on('click','#CancelarExistencias,#CancelarActualizarEncabezado',func
                                                     $("#GenerarWPAY").show()
                                                     $("#GenerarREM").hide();
                                                 }
+                                                if (efect == '03') $('#ConfirmarTransfer').show();
                                             }
                                         } else {
                                             $("#Facturar").show();
@@ -448,6 +454,7 @@ $(document).on('click','#CancelarExistencias,#CancelarActualizarEncabezado',func
                                             if (efect == '04' || efect == '28') {
                                                 $("#GenerarWPAY").show()
                                             }
+                                            if (efect == '03') $('#ConfirmarTransfer').show();
                                         }
                                     }
                                     else {
@@ -459,6 +466,7 @@ $(document).on('click','#CancelarExistencias,#CancelarActualizarEncabezado',func
                                             if (efect == '04' || efect == '28') {
                                                 $("#GenerarWPAY").show()
                                             }
+                                            if (efect == '03') $('#ConfirmarTransfer').show();
                                         }
 
                                     }
@@ -3533,6 +3541,7 @@ $(document).on('click','#actionArticulos',function(e){
                                         $("#Facturar").hide();
                                         $("#Remisionar_Facturar").hide();
                                         $("#GenerarREM").hide();
+                                        $('#ConfirmarTransfer').show();
                                     }
                                     else {
                                         $("#Facturar").show();
@@ -3544,6 +3553,7 @@ $(document).on('click','#actionArticulos',function(e){
                                         $("#GenerarWPAY").show()
                                         $("#GenerarREM").hide();
                                     }
+                                    if (efect == '03') $('#ConfirmarTransfer').show();
                                 }
                             } else {
                                 $("#Facturar").show();
@@ -3559,6 +3569,7 @@ $(document).on('click','#actionArticulos',function(e){
                                 if (efect == '04' || efect == '28') {
                                     $("#GenerarWPAY").show()
                                 }
+                                if (efect == '03') $('#ConfirmarTransfer').show();
                             }
 
                         }
@@ -3843,6 +3854,7 @@ function initResumenTestDiv() {
                                     $("#Facturar").hide();
                                     $("#Remisionar_Facturar").hide();
                                     $("#GenerarREM").hide();
+                                    $('#ConfirmarTransfer').show();
                                 } else {
                                     $("#Facturar").show();
                                     $("#GenerarREM").show();
@@ -3853,6 +3865,7 @@ function initResumenTestDiv() {
                                     $("#GenerarWPAY").show()
                                     $("#GenerarREM").hide();
                                 }
+                                if (efect == '03') $('#ConfirmarTransfer').show();
                             }
                         } else {
                             $("#Facturar").show();
@@ -3860,6 +3873,7 @@ function initResumenTestDiv() {
                             if (efect == '04' || efect == '28') {
                                 $("#GenerarWPAY").show()
                             }
+                            if (efect == '03') $('#ConfirmarTransfer').show();
                         }
                     }
                     else {
@@ -3871,6 +3885,7 @@ function initResumenTestDiv() {
                             if (efect == '04' || efect == '28') {
                                 $("#GenerarWPAY").show()
                             }
+                            if (efect == '03') $('#ConfirmarTransfer').show();
                         }
                     }
                     $("#OrdenVentaRem").val($('#DocumentId2').val());
@@ -4445,3 +4460,113 @@ function getZPLData(){
 
     return dataZPL;
 }
+
+/** Esta funcion es para solicitar
+    la confirmacion de la transferencia
+**/
+function applyCreditRequest(){
+    var data2 = {
+                     OV: $('#DocumentIdResumen').html()
+                    ,RequestType: ( $('#pagolineas option:selected').data('paymmode') == '99' ) ? '1' : '2'
+                    ,ClientCode : $('#claveclteResumen').html()
+                    ,ClientName : $('#desccliente').html()   
+                    ,OrderTakerCode : $('#secretarioventa').val()
+                    ,Status : 0
+                    ,OvAmount : $('#totalResumen').html().replace('$','').replace(',','')
+                    ,OrderTakerName : $('#vendedor').html()
+                    ,Zone : $('#sitioLineas').val()
+                }
+
+    html = '';
+    html += '<div class="row">';
+    html += '    <div class="col l12 m12 s12">';
+    html += '        <div class="card-panel yellow lighten-4">';
+    html += '            <div style="text-align:justify !important">Esta a punto de enviar una solicitud de confirmacion de transferencia al depatamento de credito y cobranza, si desea adjuntar un archivo de click en el boton de "Seleccionar Archivo". <br /><br /> Para completar el proceso favor de dar click en "Enviar solicitud" y un correo electronico estara llegando al departamento en cuestion.</div>';
+    html += '        </div>';
+    html += '    </div>';
+    html += '</div>';
+    html += '<div class="row">';
+    html += '    <div class="col m12 l12 s12">';
+    html += '        <label for="transferFile" class="waves-effect waves-light btn"><i class="material-icons right">cloud_upload</i>Seleccionar Archivo</label>';
+    html += '        <input type="file" id="transferFile" style="width:100%; display:none" />';
+    html += '    </div>';
+    html += '</div>';
+    html += '<div class="row">';
+    html += '    <div class="col m12 l12 s12">';
+    html += '       <span class="yellow lighten-4">Archivo seleccionado: </span><span id="archivo"></span>';
+    html += '    </div>';
+    html += '</div>';
+
+    swal({
+        title:'Confirmacion de Transferencia',
+        type : 'question',
+        html : html,
+        showCancelButton: true,
+        confirmButtonText:'Enviar solicitud',
+        cancelButtonText:'Cancelar'
+    }).then(function(res){
+        if (res){
+            var obj = $('#transferFile');
+            var ov = $('#DocumentIdResumen').html();
+            $.ajax({
+                url : 'inicio/applycreditrequest',
+                type: 'POST',
+                dataType: 'JSON',
+                data : {data2},
+                beforeSend : function (res){
+                    $('#modalLoading').openModal();
+                },
+                success : function(res){
+                    $('#modalLoading').closeModal();
+                    SaveAttachments(res,ov,obj);
+                    console.log(res);
+                }
+            });
+        }
+    });
+}
+
+
+/**
+Esta funcion es para guardar los datos adjuntos
+despues de crear la solicitud
+**/
+function SaveAttachments(RequestId, Ov, images){
+    var formData = new FormData();
+        var imagesCR = $(images)[0].files;
+        $(imagesCR).each(function (index) {
+            formData.append('Files', this);
+        });
+        formData.append('Id', 1);
+        formData.append('RequestId', RequestId);
+        formData.append('AttachmentType', 2);
+        formData.append('Ov', Ov);
+        formData.append('Message', 'Holiii');
+        formData.append('FileUrl', 'NO FILE');
+        formData.append('MessageFrom', 1);
+        formData.append('DateTime', '1900-01-01T12:00:00.00Z');
+        $.ajax({
+            url : 'https://ayt-apps.eastus.cloudapp.azure.com/ApiCreditRequests/api/CreditRequestsApi/UploadFiles',
+            type: 'POST',
+            crossDomain:true,
+            mimeType: "multipart/form-data",
+            contentType: false,
+            cache: false,
+            processData: false,
+            data: formData,
+            beforeSend : function (res){
+                $('#modalLoading').openModal();
+            },
+            success : function(res){
+                $('#modalLoading').closeModal();
+                console.log(res);
+            }
+        });
+}
+
+/*** Evento para cambiar el archivo
+***/
+$(document).on('change','#transferFile', function(){
+    var arch = $('#transferFile')[0].files[0].name;
+    $('#archivo').html(arch);
+});
