@@ -2268,13 +2268,4 @@ function mostrarModalServicio(invoice,ov){
         }
     );
 }
-
-// $(document).on("uploadprogress",'#dropzoneAdjuntos', function(file, progress, bytesSent) {
-//     var alreadyUploadedTotalSize = getTotalPreviousUploadedFilesSize();
-//     console.log('already',alreadyUploadedTotalSize);
-//     console.log('total',totalSizeLimit);
-//     if((alreadyUploadedTotalSize + bytesSent) > totalSizeLimit){
-//       this.disable();
-//     }
-// });
 ///////////////////////////////////////////////////////////////////////////////////////////
