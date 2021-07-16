@@ -6718,7 +6718,7 @@ static function reviewCreditLimit($customer,$ordenVenta,$montoCoti='',$tipopago)
     public static function isInUse($invoice){
       (CONFIG==DESARROLLO) ? $conn = new DB_Conexion():$conn = new DB_ConexionExport();  
       $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-      $queryExiste = " SELECT COUNT(*) AS cuantasFact FROM AYT_Calendario_Tecnicos_Servicio WHERE factura = '$invoice';";
+      $queryExiste = " EXECUTE InUseInvoice '$invoice';";
       $query = $conn->prepare($queryExiste);
       $query->execute();
       $resultExiste = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -6835,7 +6835,7 @@ static function reviewCreditLimit($customer,$ordenVenta,$montoCoti='',$tipopago)
                                                                         factura,fechaCreacion,status,comentario,tipoServicio)
                           VALUES('".$resultFolio[0]['siguiente']."','".$servicio['vendedor']."','".$servicio['nombre_vendedor']."','".$servicio['equipo']."',
                           '".$servicio['codigoCliente']."','".$servicio['nombreCliente']."','".$servicio['estado']."','".$servicio['ciudad']."',
-                          '".$servicio['factura']."',GETDATE(),2,'".$servicio['comentario']."','".$servicio['tipoServicio']."')";
+                          '".$servicio['factura']."',GETDATE(),2,'".htmlentities($servicio['comentario'])."','".$servicio['tipoServicio']."')";
       $resourceServicios = $conn->prepare($queryServicios);
       $resourceServicios->execute();
       $resultServicios = $resourceServicios->rowCount();

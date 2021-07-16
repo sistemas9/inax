@@ -1980,7 +1980,7 @@ function changeInvoice(invoiceObj) {
             service.comentario = 'waiting...';
             service.tipoServicio = 'waiting...';
         }else{
-            swal('Atencion!.', 'La factura ya esta siendo usado en un servicio, favor de consultar a su supervisor', 'warning')
+            swal('Atencion!.', 'La factura no esta aprobada aun, si desea utilizarla de nuevo es necesario el estatus de aprobada, favor de consultar a su supervisor', 'warning')
         }
       } else {
         swal('Atencion!.', 'La factura no existe o no tiene asociada una orden de venta, favor de consultar a su supervisor', 'warning')
@@ -2017,7 +2017,7 @@ function saveService() {
         var formData = new FormData();
         formData.append('service',JSON.stringify(service));
         var formDataEmail = new FormData();
-        var imagesEmail = $('#adjunto')[0].files;
+        var imagesEmail = drop_Adjuntos.files;
         $(imagesEmail).each(function (index) {
             formDataEmail.append('file'+index, this);
         });
@@ -2058,9 +2058,26 @@ function saveService() {
     }
 }
 
+
+/**
+    funcion para calcular el tamaño de los 
+    archivos agregados
+**/
+function getTotalPreviousUploadedFilesSize(){
+   var totalSize = 0;
+   drop_Adjuntos.getFilesWithStatus(Dropzone.SUCCESS).forEach(function(file){
+      totalSize = totalSize + file.size;
+   });
+   return totalSize;
+}    
+
 /** 
     funcion para mostrar el modal de servicio
 **/
+var drop_Adjuntos;
+var totalSizeLimit = 15*1024*1024; //15MB
+// var totalSizeLimit = 50*1024; //50Kb
+Dropzone.autodiscover = false;
 function mostrarModalServicio(invoice,ov){
     html = '';
     html += '<div class="row">';
@@ -2131,7 +2148,10 @@ function mostrarModalServicio(invoice,ov){
     html += '    <textarea class="form-control" id="comentarios" rows="5"></textarea>';
     html += '  </div>';
     html += '  <div class="col s4 md4 l4">';
-    html += '       <input type="file" id="adjunto" class="required">';
+    html += '   <div id="drop-adjuntoTecnicos">';
+    html += '       <form action="inicio/checkfile" class="dropzone" id="dropzoneAdjuntos">';
+    html += '       </form>';
+    html += '   </div>';
     html += '  </div>';
     html += '</div>';
     html +='<div class="row" id="progress">';
@@ -2159,12 +2179,78 @@ function mostrarModalServicio(invoice,ov){
             $('#equipo').material_select();
             $('#ovServ').val(ov);
             $('#factura').trigger('change');
+            drop_Adjuntos = new Dropzone("#dropzoneAdjuntos",
+                                        {
+                                            autoProcessQueue:true,
+                                            addRemoveLinks: true,
+                                            maxFilesize: 15,
+                                            dictDefaultMessage: 'Arrastre archivos para agregar o de click aqui', 
+                                            dictFileTooBig: 'Se ha alcanzado el limite de archivos (limite 2 archivos)',
+                                            dictUploadCanceled : 'Se alcanzo la couta de bytes por enviar (limite 15MB)',
+                                            dictRemoveFile : 'Eliminar archivo',
+                                            thumbnailWidth : 50, thumbnailHeight: 50, resizeWidth: 50,
+                                            resize: function(file) {
+                                                var resizeInfo = {
+                                                    srcX: 0,
+                                                    srcY: 0,
+                                                    trgX: 0,
+                                                    trgY: 0,
+                                                    srcWidth: file.width,
+                                                    srcHeight: file.height,
+                                                    trgWidth: this.options.thumbnailWidth,
+                                                    trgHeight: this.options.thumbnailHeight
+                                                };
+                                                return resizeInfo;
+                                            },
+                                            init: function () {
+                                                this.on('uploadprogress', function (file,progress,bytesSent) {
+                                                    var alreadyUploadedTotalSize = getTotalPreviousUploadedFilesSize();
+                                                    if((alreadyUploadedTotalSize + bytesSent) > totalSizeLimit){
+                                                        this.disable();
+                                                    }
+                                                });
+                                                this.on('removedfile', function(file){
+                                                    this.enable();
+                                                });
+                                                this.on("success", function(file){   
+                                                    $(".dz-success-mark svg").css("background", "green");
+                                                    $(".dz-success-mark svg").css("width", "40%");
+                                                    $(".dz-success-mark svg").css("border-radius", "40%");
+                                                    $(".dz-error-mark").css("display", "none");
+                                                });
+                                                this.on("error", function(file) {
+                                                    $(".dz-error-mark svg").css("background", "red");
+                                                    $(".dz-error-mark svg").css("width", "40%");
+                                                    $(".dz-error-mark svg").css("border-radius", "40%");
+                                                    $(".dz-success-mark").css("display", "none");
+                                                });
+                                            }
+                                        });
         },
         preConfirm: function(res){
             var valid = validateFields();
+            var validFilesNotEmpty = true;
+            var acceptedFiles = $.map(drop_Adjuntos.files, function(file){
+                if (file.status == 'success'){
+                    return File
+                }
+            });
+
+            var errorFiles = $.map(drop_Adjuntos.files, function(file){
+                if (file.status == 'canceled'){
+                    return File
+                }
+            });
+
+            if (acceptedFiles.length == 0){
+                validFilesNotEmpty = false;
+            }
             return new Promise(function(resolve,reject){
                 if (!valid) {
                   reject('El campo no puede ir vacio.');
+                }
+                if (!validFilesNotEmpty){
+                    reject('Agregar al menos un archivo a la solicitud');
                 }
                 resolve(true);
             });
@@ -2182,4 +2268,13 @@ function mostrarModalServicio(invoice,ov){
         }
     );
 }
+
+// $(document).on("uploadprogress",'#dropzoneAdjuntos', function(file, progress, bytesSent) {
+//     var alreadyUploadedTotalSize = getTotalPreviousUploadedFilesSize();
+//     console.log('already',alreadyUploadedTotalSize);
+//     console.log('total',totalSizeLimit);
+//     if((alreadyUploadedTotalSize + bytesSent) > totalSizeLimit){
+//       this.disable();
+//     }
+// });
 ///////////////////////////////////////////////////////////////////////////////////////////

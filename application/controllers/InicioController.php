@@ -2156,6 +2156,12 @@ public function getDireccionesAction() {
         print_r($resultCredit);
         exit();
     }
+
+    public function checkfileAction(){
+        $files = $_FILES;
+        print_r(true);
+        exit();
+    }
 }
 
 class AESCrypto{
