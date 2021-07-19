@@ -57,6 +57,63 @@
           width: 40px;
           z-index: 1000;
         }
+        .dropzone .dz-preview .dz-image {
+          width: 70px !important;
+          height: 70px !important;
+        }
+        .dropzone .dz-preview .dz-details {
+          width: 70px !important;
+          height: 70px !important;
+        }
+        .dropzone .dz-preview .dz-progress {
+          width: 70px !important;
+          height: 16px !important;
+        }
+        .dropzone .dz-preview .dz-progress span{
+          background-color: blueviolet;
+        }
+        .dropzone .dz-preview .dz-error-message {
+          width: 170px !important;
+          height: 70px !important;
+        }
+        .dropzone .dz-preview .dz-success-mark {
+          width: 70px !important;
+          height: 70px !important;
+        }
+        .dropzone .dz-preview .dz-error-mark {
+          width: 70px !important;
+          height: 70px !important;
+        }
+        .dropzone .dz-preview .dz-details .dz-size {
+          font-size: 10px !important;
+        }
+        .dropzone .dz-preview .dz-details .dz-filename {
+          font-size: 10px !important;
+        }
+
+        .dropzone .dz-preview .dz-image img{
+          max-width: 100%;
+        }
+        .dropzone .dz-preview .dz-success-mark svg, .dropzone .dz-preview .dz-error-mark svg {
+            display: block;
+            width: 30px;
+            height: 30px;
+        }
+        .dropzone .dz-preview .dz-error-message span{
+          width: 150px !important;
+          height: 70px !important;
+          max-height: 70px !important;
+          overflow: auto !important;
+          font-size: 10px !important;
+          display: inline-block;
+        }
+        .dropzone .dz-preview {
+            position: relative;
+            display: inline-block;
+            vertical-align: top;
+            margin: 16px;
+            min-height: 70px;
+        }
     </style>
 <!-- Modal loading -->
 <div id="modalLoading" class="modal light-blue darken-3" style="width: 25%">
