@@ -101,7 +101,7 @@ class Application_Model_Userinfo{
         return $result->value;
     }
 
-    public static function getCuentaPagoMostrador($user) {
+    public function getCuentaPagoMostrador($user) {
         //return $this->db->Query(USUARIO_DIARIO,[":usuario"=>$user]);
         return array();
     }
