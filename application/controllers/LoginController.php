@@ -79,7 +79,7 @@ class LoginController extends Zend_Controller_Inax
             $this->view->error = 0;
             $redirect = false;
 
-            if ( !(isset($_POST['code'])) && $_GET['state'] == 'logout' ){
+            if ( ( !(isset($_POST['code'])) && $_GET['state'] == 'logout' ) || (empty($_POST)) ){
                 // destroy session
                 $_SESSION = array();
                 unset($_SESSION['userInax'], $_SESSION['access']);
