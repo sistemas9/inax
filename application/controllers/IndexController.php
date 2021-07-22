@@ -8,7 +8,10 @@ class IndexController extends Zend_Controller_Inax{
 
     public function init(){
         if(empty($_SESSION['userInax'])){
-            $this->_redirect('/login');
+            $config = Zend_Controller_Front::getInstance()->getParam('bootstrap');
+            $env = $config->getOption('app_redirect_url_login');
+            $redirectUrl = 'https://login.microsoftonline.com/97ef83be-75fe-4de2-93cd-21df978b24c1/oauth2/authorize?client_id=d8e2e311-b455-4e00-be57-4006ae7d9adc&redirect_uri='.urlencode($env).'&response_type=code&scope=openid%20profile&response_mode=form_post&nonce=yes&state=login&x-client-SKU=ID_NETSTANDARD2_0&x-client-ver=5.5.0.0&sso_reload=true';
+            $this->redirect($redirectUrl);
         }
         // if(COMPANY=='LIN'){
         //    $this->_redirect('/errorFactura');

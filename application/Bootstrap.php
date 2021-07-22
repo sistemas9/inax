@@ -23,6 +23,12 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             'type' => 'text/css'
         ), 'PREPEND');
         $view->headLink(array(
+            'href' => STYLESHEET_PATH . '/dropzone.css',
+            'rel' => 'stylesheet',
+            'media' => 'screen',
+            'type' => 'text/css'
+        ), 'PREPEND');
+        $view->headLink(array(
             'href' => APP_PATH. '/assets/fa/css/font-awesome.min.css',
             'rel' => 'stylesheet',
             'media' => 'screen',
@@ -98,6 +104,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             'media' => 'screen',
             'type' => 'text/css'
         ), 'PREPEND');
+        $view->headScript()->prependFile(JAVASCRIPT_PATH . '/dropzone.js');
         $view->headScript()->prependFile(JAVASCRIPT_PATH . '/html2canvas.min.js');
         $view->headScript()->prependFile(JAVASCRIPT_PATH . '/jquery.hotkey.min.js');
         $view->headScript()->prependFile(JAVASCRIPT_PATH . '/select2.js');

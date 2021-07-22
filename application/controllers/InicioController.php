@@ -766,6 +766,7 @@ class InicioController extends Zend_Controller_Inax{
             $datosinicio->updateHistory($_SESSION['idProcesoVenta'],$res->SalesQuotationNumber);
             $this->json($result);
         } catch (Exception $objError) {
+            print_r($objError);
             $this->json('FAIL');
         }
     }
@@ -2148,6 +2149,19 @@ public function getDireccionesAction() {
         print_r(json_encode($result));exit();
     }
     
+    public function applycreditrequestAction(){
+        $creditRequest = filter_input_array(INPUT_POST);
+        $files = $_FILES;
+        $resultCredit = Application_Model_InicioModel::ApplyCreditRequest($creditRequest['data2'],$files);
+        print_r($resultCredit);
+        exit();
+    }
+
+    public function checkfileAction(){
+        $files = $_FILES;
+        print_r(true);
+        exit();
+    }
 }
 
 class AESCrypto{

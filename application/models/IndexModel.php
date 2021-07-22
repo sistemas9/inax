@@ -38,7 +38,7 @@ class Application_Model_IndexModel {
         // $_adapter = $db->getAdapter();
         $conn  = new DB_ConexionExport();
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $querySucu = $conn->prepare("SELECT * FROM DBO.AYT_Domicilios_sucursales WHERE sitio = ? ;");        
+        $querySucu = $conn->prepare("SELECT * FROM DBO.AYT_Domicilios_sucursales WHERE sitio = ? ;");    
         $querySucu->bindParam(1,$sitio);
         $querySucu->execute();
         $resultSucu = $querySucu->fetchAll();
@@ -119,7 +119,7 @@ class Application_Model_IndexModel {
     }
 
     public static function getDatosEtiqueta($user,$sitio,$ov,$isCot = false) {
-        $datosSucu = Application_Model_IndexModel::getDireccionofSitio($sitio);
+        $datosSucu = Application_Model_IndexModel::getDireccionOfSitio($sitio);
         $monto = Application_Model_IndexModel::getMontoEtiqueta($ov);
         $curl = curl_init();
         if(empty($monto)){$monto='0.0';}
