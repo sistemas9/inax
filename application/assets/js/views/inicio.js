@@ -4544,6 +4544,7 @@ function SaveAttachments(RequestId, Ov, images){
         formData.append('Message', 'Holiii');
         formData.append('FileUrl', 'NO FILE');
         formData.append('MessageFrom', 1);
+        formData.append('RequestUser',usuario);
         formData.append('DateTime', '1900-01-01T12:00:00.00Z');
         $.ajax({
             url : 'https://ayt-apps.eastus.cloudapp.azure.com/ApiCreditRequests/api/CreditRequestsApi/UploadFiles',
