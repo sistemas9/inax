@@ -823,6 +823,8 @@ class Metodos{
                       $query = $adapter->prepare("INSERT INTO dbo.AYT_ComentariosLineas (inventoryLotId,comentario,tipoDoc,documentId,fechaCreacion,fechaModificacion,usuario,LineSequenceNumber) VALUES('".$value2->InventoryLotId."','".$dataCot[0]['comentario']."','ORDVTA','".$orventa."',GETDATE(),NULL,'".$_SESSION['userInax']."','".$value2->LineCreationSequenceNumber."');");
                       $query->execute();
                       $resultQuery = $query->rowCount();
+                      $model = new Application_Model_InicioModel();
+                      $model->postDocumentAttachment($dataCot[0]['comentario'],$orventa,$value2->ItemNumber);
                     }catch(Exception $e){
                       print_r($e->getMessage());
                     }

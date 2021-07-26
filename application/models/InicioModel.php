@@ -3725,6 +3725,41 @@ class Application_Model_InicioModel {
             return array("resultado"=>"bad","respuesta"=>$objError->getMessage());
         }   
     }
+
+    public function postDocumentAttachment($comentario,$ov,$itemId){
+      if ( (strrpos('OV-', $ov) >= 0) && $itemId == '9999-9000'){
+        $token = new Token();
+        $curl = curl_init();
+
+        curl_setopt_array($curl, [
+          CURLOPT_URL => "https://".DYNAMICS365."/Data/SalesOrderHeaderDocumentAttachments",
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_ENCODING => "",
+          CURLOPT_MAXREDIRS => 10,
+          CURLOPT_TIMEOUT => 30,
+          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_CUSTOMREQUEST => "POST",
+          CURLOPT_POSTFIELDS => "{\"dataAreaId\": \"".COMPANY."\",\"FileType\": \"\",\"IsDefaultAttachment\": \"No\",\"SalesOrderNumber\": \"".$ov."\",\"AccessRestriction\": \"Internal\",\"AttachmentDescription\": \"Nota\",\"Notes\": \"".$comentario."\",\"DocumentAttachmentTypeCode\": \"Nota\",\"FileName\": \"\",\"Attachment\": null}",
+          CURLOPT_COOKIE => "ApplicationGatewayAffinity=e7fb295f94cb4b5e0cd1e2a4712e4a803fc926342cc4ecca988f29125dbd4b04; ARRAffinity=dcb76979b784a1f85f17f2b977b7d851aad42c68a3aba6e28de4029069113332",
+          CURLOPT_HTTPHEADER => [
+          "Accept: application/json",
+          "Authorization: Bearer ".$token->getToken()[0]->Token."",
+          "Content-Type: application/json"
+          ],
+        ]);
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+          return "cURL Error #:" . $err;
+        } else {
+          return true;
+        }
+      }
+    }
     
     public function setLineas($params,$idDoc,$tipo,$promoCodeEnable,$removeDynamicsPrice = false) {
          try {
@@ -3754,7 +3789,10 @@ class Application_Model_InicioModel {
                   $query = $adapter->prepare("UPDATE dbo.AYT_ComentariosLineas SET comentario = '".$params[0]['comentariolinea']."',usuario = '".$_SESSION['userInax']."', fechaModificacion = GETDATE(), LineSequenceNumber = '".$result->LineCreationSequenceNumber."' WHERE documentId = '".$id."' AND InventoryLotId = '".$result->InventoryLotId."';");
                 }else{
                   $query = $adapter->prepare("INSERT INTO dbo.AYT_ComentariosLineas (inventoryLotId,comentario,tipoDoc,documentId,fechaCreacion,fechaModificacion,usuario,LineSequenceNumber) VALUES('".$result->InventoryLotId."','".$params[0]['comentariolinea']."','".$tipo."','".$id."',GETDATE(),NULL,'".$_SESSION['userInax']."','".$result->LineCreationSequenceNumber."');");
+                  $this->postDocumentAttachment($params[0]['comentariolinea'],$id,$params[0]['item']);
                 }
+              }else{
+                $this->postDocumentAttachment($params[0]['comentariolinea'],$id,$params[0]['item']);
               }
               $query->execute();
               $resultQuery = $query->rowCount();
