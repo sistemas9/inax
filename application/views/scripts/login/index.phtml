@@ -103,14 +103,14 @@
     <script>
         
         
-        $('#login-panel').hide();
-        setTimeout(function(){ 
-            $('#login-panel').show().animate({
-                width: "100%",
-                opacity: 1,
-                marginTop: "100px"
-            }, 2000 );
-        }, 1000);
+        // $('#login-panel').hide();
+        // setTimeout(function(){ 
+        //     $('#login-panel').show().animate({
+        //         width: "100%",
+        //         opacity: 1,
+        //         marginTop: "100px"
+        //     }, 2000 );
+        // }, 1000);
 
 
         if (true) {
@@ -139,5 +139,42 @@
                 },!0)
             }    
         }
+
+        var ssoAuthenticated = '<?php print_r( $this->ssoauthenticated ); ?>';
+        if (ssoAuthenticated == 3){
+            $('#login-panel').hide();
+            window.location.href = '../public/';
+        }
+
+        $('#loginForm').on('submit',function(ev){
+            ev.preventDefault();
+            datas = $('#loginForm').serialize();
+            $.ajax({ 
+                url: "login", 
+                type: "post", 
+                dataType: "json",
+                data: datas,
+                beforeSend: function (xhr) {
+                    $('#imgCargandoLogin').show();
+                },
+                success: function (res){
+                    $('#imgCargandoLogin').hide();
+                    // if (res == 3){
+                    //     $('.progress').show();
+                    //     openDb().then(function(res){
+                    //         if (res == 'dataBase Created'){
+                    //             agregarDataDB();
+                    //         }
+                    //     });
+                    // }else if (res == 1){
+                    //     $('#incorrectos').show();
+                    //     $('#noautorizado').hide();
+                    // }else if (res == 4){
+                    //     $('#incorrectos').hide();
+                    //     $('#noautorizado').show();
+                    // }
+                }
+            });
+        });
     </script>
 </html>
