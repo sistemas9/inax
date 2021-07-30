@@ -6875,7 +6875,7 @@ static function reviewCreditLimit($customer,$ordenVenta,$montoCoti='',$tipopago)
 
       $queryServicios = "INSERT INTO AYT_Calendario_Tecnicos_Servicio ( folio,vendedor,nombre_vendedor,equipo,codigoCliente,nombreCliente,estado,ciudad,
                                                                         factura,fechaCreacion,status,comentario,tipoServicio)
-                          VALUES('".$resultFolio[0]['siguiente']."','".$servicio['vendedor']."','".$servicio['nombre_vendedor']."','".$servicio['equipo']."',
+                          VALUES('".$resultFolio[0]['siguiente']."','".$servicio['vendedor']."','".$servicio['nombre_vendedor']."','".$equipo."',
                           '".$servicio['codigoCliente']."','".$servicio['nombreCliente']."','".$servicio['estado']."','".$servicio['ciudad']."',
                           '".$servicio['factura']."',GETDATE(),2,'".htmlentities($comentario)."','".$servicio['tipoServicio']."')";
       $resourceServicios = $conn->prepare($queryServicios);
