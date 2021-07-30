@@ -6869,6 +6869,9 @@ static function reviewCreditLimit($customer,$ordenVenta,$montoCoti='',$tipopago)
       $query->execute();
       $resultFolio = $query->fetchAll(PDO::FETCH_ASSOC);
       $comentario = str_replace("\n", " ", $servicio['comentario']);
+      $equipo = str_replace('\'', ' ft.', $servicio['equipo']);
+      $equipo = str_replace('\'\'', ' inch.', $equipo);
+      $equipo = str_replace('"', ' inch.', $equipo);
 
       $queryServicios = "INSERT INTO AYT_Calendario_Tecnicos_Servicio ( folio,vendedor,nombre_vendedor,equipo,codigoCliente,nombreCliente,estado,ciudad,
                                                                         factura,fechaCreacion,status,comentario,tipoServicio)
