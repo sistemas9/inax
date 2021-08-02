@@ -6903,7 +6903,7 @@ static function reviewCreditLimit($customer,$ordenVenta,$montoCoti='',$tipopago)
       $correo = $contact[0]['Locator'];
       $telefono = $contact[1]['Locator'];
       if ($existeInfo['existe']){
-        $querySaveCYRInfo = "UPDATE AYT_CyR_Info SET cyrCorreo = '$correo', cyrTelefono = '$telefono';";
+        $querySaveCYRInfo = "UPDATE AYT_CyR_Info SET cyrCorreo = '$correo', cyrTelefono = '$telefono' WHERE customerAccount = '$customer';";
       }else{
         $querySaveCYRInfo = "INSERT INTO AYT_CyR_Info (customerAccount, customerName, cyrCorreo, cyrTelefono) VALUES ('$customer','$custName','$correo','$telefono');";
       }
