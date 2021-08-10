@@ -4503,7 +4503,15 @@ function applyCreditRequest(){
         html : html,
         showCancelButton: true,
         confirmButtonText:'Enviar solicitud',
-        cancelButtonText:'Cancelar'
+        cancelButtonText:'Cancelar',
+        preConfirm : function(result){
+            return new Promise(function(resolve,reject){
+                if( $('#transferFile').val() == ""){
+                    reject('El campo archivo no puede ir vacio.');
+                }
+                resolve(result);
+            });
+        }
     }).then(function(res){
         if (res){
             var obj = $('#transferFile');

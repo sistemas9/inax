@@ -1019,6 +1019,8 @@ class Application_Model_IndexModel {
              }
 
             $impresion = '';
+            $statusCreditRequest = Application_Model_IndexModel::GetStatusCreditRequest($dat->SalesOrderNumber);
+            $placaCreditRequest = '';
             // print_r($dat->SalesOrderStatus);exit();
             if($dat->SalesOrderStatus == 'Invoiced'){
                 $datosfac=Application_Model_FacturaModel::consultarFac($dat->SalesOrderNumber);
@@ -1042,6 +1044,27 @@ class Application_Model_IndexModel {
                 <br>
                 <a href="#" onclick="mostrarModalServicio(\''.$datosfac->value[0]->InvoiceNumber.'\',\''.$dat->SalesOrderNumber.'\')">Servicio</a>';
                 // $impresion='<a href="http://svr02:8989/Facturacion365/Facturacion365.php?ov='.$dat->SalesOrderNumber.'&amp;tipo=CLIENTE" target="_blank"><i class="fa fa-file-pdf-o" style="color:#840101;"></i> Factura</a>';
+                switch ($statusCreditRequest) {
+                    case '0':
+                        $placaCreditRequest .= '<span class="badge blue darken-1 white-text" style="position:relative;font-size: 12px;">Sol.Cred.Creada</span>';
+                        break;
+
+                    case '1':
+                        $placaCreditRequest .= '<span class="badge green white-text" style="position:relative;font-size: 12px;">Sol.Cred.Finalizada</span>';
+                        break;
+
+                    case '3':
+                        $placaCreditRequest .= '<span class="badge purple white-text" style="position:relative;font-size: 12px;">Sol.Cred.Liber.Pend</span>';
+                        break;
+
+                    case '4':
+                        $placaCreditRequest .= '<span class="badge red white-text" style="position:relative;font-size: 12px;">Sol.Cred.Rechazada</span>';
+                        break;
+                    
+                    default:
+                        $placaCreditRequest .= '<span class="badge grey white-text" style="position:relative;font-size: 12px;">Sol.Cred.Pendiente</span>';
+                        break;
+                }
             }
             // if($dat->SalesOrderStatus == 'Delivered'){
             //     foreach ($_SESSION['factura'] as $key => $value) {
@@ -1135,7 +1158,7 @@ class Application_Model_IndexModel {
                 6   => $dat->DefaultShippingWarehouseId, // "CHIHCONS",
                 7   => $entrega, //"PASA",
                 8   => $nombre,//$dat->OrderTakerPersonnelNumber, //"ARMANDO MARISCAL",
-                9   => $dat->ReleaseStatus,
+                9   => '<div class="row"><div class="col-md-12">'. $dat->ReleaseStatus.'<br>'.$placaCreditRequest.'</div></div>',
                 10  => $dat->SalesOrderStatus, //"Facturado",
                 11  => $data . '<br><br>' . $btnPDF, //"",
                 12  => $impresion,
@@ -1146,6 +1169,17 @@ class Application_Model_IndexModel {
 
         return $dataOV;        
 
+    }
+
+    public static function GetStatusCreditRequest($ov){
+        (CONFIG==DESARROLLO) ? $conn = new DB_Conexion():$conn = new DB_ConexionExport();
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $queryStatus = "SELECT Status FROM AYT_CreditRequest WHERE Ov = '$ov';";
+        $statusInfo = $conn->prepare($queryStatus);
+        $statusInfo->execute();
+        $resultStatusInfo = $statusInfo->fetchAll(PDO::FETCH_ASSOC);
+
+        return $resultStatusInfo[0]['Status'];
     }
 
     public static function translate365($x){

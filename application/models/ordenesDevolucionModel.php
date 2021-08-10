@@ -186,7 +186,7 @@ class Application_Model_ordenesDevolucionModel{
         }
         
         curl_setopt_array($curl, array(
-          CURLOPT_URL => "https://".DYNAMICS365."/data/ReturnOrderHeaders?%24filter=ReturnOrderNumber%20eq%20'".$response."'&%24select=RMANumber",
+          CURLOPT_URL => "https://".DYNAMICS365."/data/ReturnOrderHeaders?%24filter=ReturnOrderNumber%20eq%20'".$response."'&%24select=RMANumber%2CDefaultReturnSiteId%2CDefaultReturnWarehouseId",
           CURLOPT_RETURNTRANSFER => true,
           CURLOPT_ENCODING => "",
           CURLOPT_MAXREDIRS => 10,
@@ -213,10 +213,11 @@ class Application_Model_ordenesDevolucionModel{
       if ($err) {
       return "cURL Error #:" . $err;
       } else {
+        $dataAlma = self::getInventDataOvOrigenLines($ovOrigen);
         $salesTaxGroupCodeOrigen = self::getTaxGroupOvOrigen($ovOrigen);
         // if ($salesTaxGroupCodeOrigen == 'FRONT'){
           $returnOrderNumber = self::getReturnOrderNumber($response3->value[0]->RMANumber);
-          self::patchReturnOrderNumber($returnOrderNumber,$salesTaxGroupCodeOrigen);
+          self::patchReturnOrderNumber($returnOrderNumber,$salesTaxGroupCodeOrigen,$dataAlma['sitio'],$dataAlma['almacen']);
         // }
         return array('respuesta'=>$response2,'ordenventa'=>$response3->value[0]->RMANumber);
       }      
@@ -287,7 +288,7 @@ class Application_Model_ordenesDevolucionModel{
       }
     }
 
-    public static function patchReturnOrderNumber($returnOrderNumber,$TaxGroup){
+    public static function patchReturnOrderNumber($returnOrderNumber,$TaxGroup,$sitio,$almacen){
       $token = new Token();
       $curl = curl_init();
       curl_setopt_array($curl, [
@@ -300,10 +301,12 @@ class Application_Model_ordenesDevolucionModel{
         CURLOPT_CUSTOMREQUEST => "PATCH",
         // CURLOPT_POSTFIELDS => "{\n\t\"TaxGroup\":\"".$TaxGroup."\"\n}",
         CURLOPT_POSTFIELDS => '{
-                                "PaymMode"      : "'.$TaxGroup->CustomerPaymentMethodName.'",
-                                "DlvMode"       : "'.$TaxGroup->DeliveryModeCode.'",
-                                "SalesOriginId" : "'.$TaxGroup->SalesOrderOriginCode.'",
-                                "TaxGroup"      : "'.$TaxGroup->SalesTaxGroupCode.'"
+                                "PaymMode"          : "'.$TaxGroup->CustomerPaymentMethodName.'",
+                                "DlvMode"           : "'.$TaxGroup->DeliveryModeCode.'",
+                                "SalesOriginId"     : "'.$TaxGroup->SalesOrderOriginCode.'",
+                                "TaxGroup"          : "'.$TaxGroup->SalesTaxGroupCode.'",
+                                "InventSiteId"      : "'.$sitio.'",
+                                "InventLocationId"  : "'.$almacen.'"
                               }',
         CURLOPT_COOKIE => "ApplicationGatewayAffinity=e7fb295f94cb4b5e0cd1e2a4712e4a803fc926342cc4ecca988f29125dbd4b04",
         CURLOPT_HTTPHEADER => [
@@ -416,5 +419,31 @@ class Application_Model_ordenesDevolucionModel{
         $result = json_decode($response);
         return $result->value[0];
       }
+    }
+
+    public static function getInventDataOvOrigenLines($ovOrigen){
+      $token= new Token();
+      $curl = curl_init();
+      curl_setopt_array($curl, array(
+        CURLOPT_URL => "https://".DYNAMICS365."/data/SalesOrderLines?%24filter=SalesOrderNumber%20eq%20'".$ovOrigen."'",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => "",
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "GET",
+        CURLOPT_POSTFIELDS => "",
+        CURLOPT_HTTPHEADER => array(
+        "authorization: Bearer ".$token->getToken()[0]->Token.""
+        ),
+        ));
+        $totales=[];
+        $response2 = curl_exec($curl);
+        $err = curl_error($curl);
+        curl_close($curl);
+
+        $resultLineas = json_decode($response2);
+
+        return array('sitio' => $resultLineas->value[0]->ShippingSiteId, 'almacen' => $resultLineas->value[0]->ShippingWarehouseId);
     }
 }
