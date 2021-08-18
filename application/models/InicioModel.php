@@ -6591,6 +6591,7 @@ static function reviewCreditLimit($customer,$ordenVenta,$montoCoti='',$tipopago)
         }
       }
       $query->execute();
+      Application_Model_InicioModel::$log->kardexLog("PostLabel",$html,$cot,1,'Creacion/edicion de etiqueta');
       echo json_encode(array('success'=>'true'));
     }
 

@@ -1955,6 +1955,7 @@ public function getDireccionesAction() {
 
     public function postlabelAction(){
         extract($_POST);
+        $model= new Application_Model_InicioModel();
         if($cot){
             Application_Model_ZPLTemplateModel::setZPLData($dataZPL,$cot);
             $result = Application_Model_InicioModel::postLabel($cot,$html);

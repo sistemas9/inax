@@ -1203,7 +1203,8 @@ $('#impArchEti').on('click',function(){
             //w.document.write(style+html);
             //w.print();
             //w.close();
-            $.post('inicio/postlabel', { ov: labelOvClicked, html: style + html }).done(function (data) {
+            var dataZPL = getZPLData();
+            $.post('inicio/postlabel', { ov: labelOvClicked, html: style + html,dataZPL }).done(function (data) {
                 data = JSON.parse(data);
                 console.log(data);
                 if (data.success == 'true') {
@@ -2269,3 +2270,71 @@ function mostrarModalServicio(invoice,ov){
     );
 }
 ///////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+*** funcion para obtener el objeto de los datos para generar el
+*** archivo zpl
+**/
+function getZPLData(){
+    var rows = $('#tablaEtiqueta tbody tr');
+    var tdRfcCompany = $($(rows)[0]).find('td')[0];
+    var RFCCompany = $(tdRfcCompany).find('input').val().trim();
+
+    var tdCalleCompany = $($(rows)[1]).find('td')[0];
+    var calleCompany = $(tdCalleCompany).find('input').val().trim();
+
+    var tdColCompany = $($(rows)[2]).find('td')[0];
+    var colCompany = $(tdColCompany).find('input').val().trim();
+
+    var tdEstadoCompany = $($(rows)[3]).find('td')[0];
+    var estadoCompany = $(tdEstadoCompany).find('input').val().trim();
+
+    var tdTelCompany = $($(rows)[4]).find('td')[0];
+    var telCompany = $(tdTelCompany).find('input').val().trim();
+
+    var tdUsuarioVenta = $($(rows)[11]).find('td')[0];
+    var usuarioVenta = $(tdUsuarioVenta).html().trim();
+
+    var tdCreacionFecVenta = $($(rows)[12]).find('td')[0];
+    var creacionFecVenta = $(tdCreacionFecVenta).html().trim();
+
+    var tdOvCompleto = $($(rows)[0]).find('td')[1];
+    var ovCompleto = $(tdOvCompleto).find('input').val().trim();
+
+    var tdMontoVenta = $($(rows)[1]).find('td')[1];
+    var montoVenta = $(tdMontoVenta).find('input').val().trim();
+
+    var tdPrecaucion = $($(rows)[2]).find('td')[1];
+    var precaucion = $(tdPrecaucion).find('input').val().trim();
+
+    var tdEmailCliente = $($(rows)[3]).find('td')[1];
+    var emailCliente = $(tdEmailCliente).find('input').val().trim();
+
+    var tdComentarios = $($(rows)[4]).find('td')[1];
+    var comentarios = $(tdComentarios).find('input').val().trim();
+
+    var tdRfcCliente = $($(rows)[6]).find('td')[1];
+    var RFCCliente = $(tdRfcCliente).find('input').val().trim();
+
+    var tdCalleCliente = $($(rows)[7]).find('td')[1];
+    var calleCliente = $(tdCalleCliente).find('input').val().trim();
+
+    var tdColCliente = $($(rows)[8]).find('td')[1];
+    var colCliente = $(tdColCliente).find('input').val().trim();
+
+    var tdEstadoCliente = $($(rows)[9]).find('td')[1];
+    var estadoCliente = $(tdEstadoCliente).find('input').val().trim();
+
+    var tdTelefonoCliente = $($(rows)[10]).find('td')[1];
+    var telefonoCliente = $(tdTelefonoCliente).find('input').val().trim();
+
+    var tdPaqueteriaVenta = $($(rows)[11]).find('td')[1];
+    var paqueteriaVenta = $(tdPaqueteriaVenta).find('input').val().trim();
+
+    var tdSeguroVenta = $($(rows)[12]).find('td')[1];
+    var seguroVenta = $(tdSeguroVenta).find('input').val().trim();
+
+    var dataZPL = {RFCCompany,calleCompany,colCompany,estadoCompany,telCompany,usuarioVenta,creacionFecVenta,ovCompleto,montoVenta,precaucion,emailCliente,comentarios,RFCCliente,calleCliente,colCliente,estadoCliente,telefonoCliente,paqueteriaVenta,seguroVenta};
+
+    return dataZPL;
+}
